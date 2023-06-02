@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "emsgine-app",
+    "emsgine-core",
+    "emsgine-lib",
+    "emsgine-plugin",
+    "emsgine-wplugin",
+]

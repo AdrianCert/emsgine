@@ -1,0 +1,22 @@
+
+# Directories
+**/bin
+
+# Visual Studio Files
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+*.lock
+.venv
+
+
+*.pyc
+**/*.egg-info
+
+# Visual Studio Code
+.vscode
+
+**/target
