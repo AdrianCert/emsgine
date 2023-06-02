@@ -1,0 +1,169 @@
+0001 11rd dddd rrrr $width 2 $syntax ADC Rd,Rr $name AddWithCarry
+0000 11rd dddd rrrr $width 2 $syntax ADD Rd,Rr $name Add
+1001 0110 KKdd KKKK $width 2 $syntax ADIW Rd+1:Rd,K $name AddWithImmediate
+0010 00rd dddd rrrr $width 2 $syntax AND Rd,Rr $name LogicalAnd
+0111 KKKK dddd KKKK $width 2 $syntax ANDI Rd,K $name LogicalAndWithImmediate
+1001 010d dddd 0101 $width 2 $syntax ASR Rd $name ArithmeticShiftRight
+1001 0100 1sss 1000 $width 2 $syntax BCLR s $name BitClearInSREG
+1111 100d dddd 0bbb $width 2 $syntax BLD Rd,b $name BitLoadInRegisterfromT
+1111 01kk kkkk ksss $width 2 $syntax BRBC s,k $name BranchSregBitCleared
+1111 00kk kkkk ksss $width 2 $syntax BRBS s,k $name BranchSregBitSet
+####################################################################
+# pseudo instructions for BRBS s,k
+# 1111 00kk kkkk k000 $width 2 $syntax BRCS k
+# 1111 00kk kkkk k111 $width 2 $syntax BRIE k
+# 1111 00kk kkkk k000 $width 2 $syntax BRLO k
+# 1111 00kk kkkk k100 $width 2 $syntax BRLT k
+# 1111 00kk kkkk k010 $width 2 $syntax BRMI k
+# 1111 00kk kkkk k001 $width 2 $syntax BREQ k
+# 1111 00kk kkkk k101 $width 2 $syntax BRHS k
+# 1111 00kk kkkk k110 $width 2 $syntax BRTS k
+# 1111 00kk kkkk k011 $width 2 $syntax BRVS k
+####################################################################
+# pseudo instructions for BRBC s,k
+# 1111 01kk kkkk k000 $width 2 $syntax BRCC k
+# 1111 01kk kkkk k100 $width 2 $syntax BRGE k
+# 1111 01kk kkkk k101 $width 2 $syntax BRHC k
+# 1111 01kk kkkk k111 $width 2 $syntax BRID k
+# 1111 01kk kkkk k001 $width 2 $syntax BRNE k
+# 1111 01kk kkkk k010 $width 2 $syntax BRPL k
+# 1111 01kk kkkk k000 $width 2 $syntax BRSH k
+# 1111 01kk kkkk k110 $width 2 $syntax BRTC k
+# 1111 01kk kkkk k011 $width 2 $syntax BRVC k
+####################################################################
+# pseudo BCLR s
+# 1001 0100 1000 1000 $width 2 $syntax CLC
+# 1001 0100 1101 1000 $width 2 $syntax CLH
+# 1001 0100 1111 1000 $width 2 $syntax CLI
+# 1001 0100 1010 1000 $width 2 $syntax CLN
+# 1001 0100 1100 1000 $width 2 $syntax CLS
+# 1001 0100 1110 1000 $width 2 $syntax CLT
+# 1001 0100 1011 1000 $width 2 $syntax CLV
+# 1001 0100 1001 1000 $width 2 $syntax CLZ
+####################################################################
+# pseudo EOR Rd,Rr
+# 0010 01dd dddd dddd $width 2 $syntax CLR Rd
+###################################################################
+# pseudo ANDI Rd,K
+# 0111 KKKK dddd KKKK $width 2 $syntax CBR Rd,K (ANDI but d ← Rd • ($FF - K))
+###################################################################
+# pseudo for ADD Rd,Rd
+# 0000 11dd dddd dddd $width 2 $syntax LSL Rd
+###############################################
+# pseudo ORI Rd,K
+# 0110 KKKK dddd KKKK $width 2 $syntax SBR Rd,K
+###############################################
+# pseudo ADC Rd,Rr
+# 0001 11dd dddd dddd $width 2 $syntax ROL Rd
+#####################################################
+# pseudo BSET s
+# 1001 0100 0000 1000 $width 2 $syntax SEC
+# 1001 0100 0101 1000 $width 2 $syntax SEH
+# 1001 0100 0111 1000 $width 2 $syntax SEI
+# 1001 0100 0010 1000 $width 2 $syntax SEN
+# 1001 0100 0100 1000 $width 2 $syntax SES
+# 1001 0100 0110 1000 $width 2 $syntax SET
+# 1001 0100 0011 1000 $width 2 $syntax SEV
+# 1001 0100 0001 1000 $width 2 $syntax SEZ
+######################################################
+# pseudo LDI Rd,K
+# 1110 1111 dddd 1111 $width 2 $syntax SER Rd
+######################################################
+# pseudo for AND Rd,Rr
+# 0010 00dd dddd dddd $width 2 $syntax TST Rd
+#############################################
+1001 0101 1001 1000 $width 2 $syntax BREAK $name Break
+1001 0100 0sss 1000 $width 2 $syntax BSET s $name BitSet
+1111 101d dddd 0bbb $width 2 $syntax BST Rd,b $name BitStorefromRegister
+1001 010k kkkk 111k kkkk kkkk kkkk kkkk $width 4 $syntax CALL k $name Call
+1001 1000 AAAA Abbb $width 2 $syntax CBI A,b $name ClearIOBit
+1001 010d dddd 0000 $width 2 $syntax COM Rd $name Complement
+0001 01rd dddd rrrr $width 2 $syntax CP Rd,Rr $name Compare
+0000 01rd dddd rrrr $width 2 $syntax CPC Rd,Rr $name CompareWithCarry
+0011 KKKK dddd KKKK $width 2 $syntax CPI Rd,K $name CompareWithImmediate
+0001 00rd dddd rrrr $width 2 $syntax CPSE Rd,Rr $name CompareSkipIfEqual
+1001 010d dddd 1010 $width 2 $syntax DEC Rd $name Decrement
+1001 0100 KKKK 1011 $width 2 $syntax DES K $name DataEncryptionStandart
+1001 0101 0001 1001 $width 2 $syntax EICALL $name ExtendedIndirectCallSubroutine
+1001 0100 0001 1001 $width 2 $syntax EIJMP $name ExtendedIndirectJump
+1001 0101 1101 1000 $width 2 $syntax ELPM $name ExtendedLoadProgramMemory
+1001 000d dddd 0110 $width 2 $syntax ELPM Rd, Z $name ExtendedLoadProgramMemoryZ
+1001 000d dddd 0111 $width 2 $syntax ELPM Rd, Z+ $name ExtendedLoadProgramMemoryZplus
+0010 01rd dddd rrrr $width 2 $syntax EOR Rd,Rr $name LogicalExclusiveOr
+0000 0011 0ddd 1rrr $width 2 $syntax FMUL Rd,Rr $name FractionalMultiplyUnsigned
+0000 0011 1ddd 0rrr $width 2 $syntax FMULS Rd,Rr $name FractionalMultiplySigned
+0000 0011 1ddd 1rrr $width 2 $syntax FMULSU Rd,Rr $name FractionalMultiplySignedWithUnsigned
+1001 0101 0000 1001 $width 2 $syntax ICALL $name IndirectCallSubroutine
+1001 0100 0000 1001 $width 2 $syntax IJMP $name IndirectJump
+1011 0AAd dddd AAAA $width 2 $syntax IN Rd,A $name LoadFromIOSpace
+1001 010d dddd 0011 $width 2 $syntax INC Rd $name Increment
+1001 010k kkkk 110k kkkk kkkk kkkk kkkk $width 4 $syntax JMP k $name Jump
+1001 001r rrrr 0110 $width 2 $syntax LAC Z,Rd $name LoadAndClear
+1001 001r rrrr 0101 $width 2 $syntax LAS Z,Rd $name LoadAndSet
+1001 001r rrrr 0111 $width 2 $syntax LAT Z,Rd $name LoadAndToggle
+1001 000d dddd 1100 $width 2 $syntax LD Rd, X $name LoadIndirectFromDataSpaceIndexX
+1001 000d dddd 1101 $width 2 $syntax LD Rd, X+ $name LoadIndirectFromDataSpacePostIncrementX
+1001 000d dddd 1110 $width 2 $syntax LD Rd, -X $name LoadIndirectFromDataSpacePreDecrementX
+1001 000d dddd 1001 $width 2 $syntax LD Rd, Y+ $name LoadIndirectFromDataSpacePostIncrementY
+1001 000d dddd 1010 $width 2 $syntax LD Rd, -Y $name LoadIndirectFromDataSpacePreDecrementY
+1001 000d dddd 0001 $width 2 $syntax LD Rd, Z+ $name LoadIndirectFromDataSpacePostIncrementZ
+1001 000d dddd 0010 $width 2 $syntax LD Rd, -Z $name LoadIndirectFromDataSpacePreDecrementZ
+1110 KKKK dddd KKKK $width 2 $syntax LDI Rd,K $name LoadImmediate
+1001 000d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax LDS Rd,k $name LoadDirectFromDataSpace
+1001 0101 1100 1000 $width 2 $syntax LPM $name LoadProgramMemory
+1001 000d dddd 0100 $width 2 $syntax LPM Rd, Z $name LoadProgramMemoryZ
+1001 000d dddd 0101 $width 2 $syntax LPM Rd, Z+ $name LoadProgramMemoryZplus
+1001 010d dddd 0110 $width 2 $syntax LSR Rd $name LogicalShiftRight
+0010 11rd dddd rrrr $width 2 $syntax MOV Rd,Rr $name CopyRegister
+0000 0001 dddd rrrr $width 2 $syntax MOVW Rd+1:Rd,Rr+1:Rr $name CopyRegisterWord
+1001 11rd dddd rrrr $width 2 $syntax MUL Rd,Rr $name MultiplyUnsigned
+0000 0010 dddd rrrr $width 2 $syntax MULS Rd,Rr $name MultiplySigned
+0000 0011 0ddd 0rrr $width 2 $syntax MULSU Rd,Rr $name MultiplySignedWithUnsigned
+1001 010d dddd 0001 $width 2 $syntax NEG Rd $name ComplementTwo
+0000 0000 0000 0000 $width 2 $syntax NOP $name NoOperation
+0010 10rd dddd rrrr $width 2 $syntax OR Rd,Rr $name LogicalOr
+0110 KKKK dddd KKKK $width 2 $syntax ORI Rd,K $name LogicalOrWithImmediate
+1011 1AAr rrrr AAAA $width 2 $syntax OUT A,Rr $name StoreToIoSpace
+1001 000d dddd 1111 $width 2 $syntax POP Rd $name PopRegisterFromStack
+1001 001d dddd 1111 $width 2 $syntax PUSH Rr $name PushRegisterToStack
+1101 kkkk kkkk kkkk $width 2 $syntax RCALL k $name RelativeCallSubroutine
+1001 0101 0000 1000 $width 2 $syntax RET $name ReturnFromSubroutine
+1001 0101 0001 1000 $width 2 $syntax RETI $name ReturnFromInterrupt
+1100 kkkk kkkk kkkk $width 2 $syntax RJMP k $name RelativeJump
+1001 010d dddd 0111 $width 2 $syntax ROR Rd $name RotateRightThroughCarry
+0000 10rd dddd rrrr $width 2 $syntax SBC Rd,Rr $name SubtractWithCarry
+0100 KKKK dddd KKKK $width 2 $syntax SBCI Rd,K $name SubtractImmediateWithCarrySbi
+1001 1010 AAAA Abbb $width 2 $syntax SBI A,b $name SetBitIoSpace
+1001 1001 AAAA Abbb $width 2 $syntax SBIC A,b $name SkipIfIoBitCleared
+1001 1011 AAAA Abbb $width 2 $syntax SBIS A,b $name SkipIfIoBitSet
+1001 0111 KKdd KKKK $width 2 $syntax SBIW Rd+1:Rd,K $name SubtractImmediateWord
+1111 110r rrrr 0bbb $width 2 $syntax SBRC Rr,b $name SkipIfBitCleared
+1111 111r rrrr 0bbb $width 2 $syntax SBRS Rr,b $name SkipIfBitSet
+1001 0101 1000 1000 $width 2 $syntax SLEEP $name Sleep
+1001 0101 1110 1000 $width 2 $syntax SPM $ $name StoreMemoryProgram
+1001 0101 1111 1000 $width 2 $syntax SPM Z+ $name StoreMemoryProgramPostIncrementZ
+1001 001r rrrr 1100 $width 2 $syntax ST X, Rr $name StoreIndirectDataSpaceIndexX
+1001 001r rrrr 1101 $width 2 $syntax ST X+, Rr $name StoreIndirectDataSpacePostIncrementX
+1001 001r rrrr 1110 $width 2 $syntax ST -X, Rr $name StoreIndirectDataSpacePreDecrementX
+1001 001r rrrr 1001 $width 2 $syntax ST Y+, Rr $name StoreIndirectDataSpacePostIncrementY
+1001 001r rrrr 1010 $width 2 $syntax ST -Y, Rr $name StoreIndirectDataSpacePreDecrementY
+1001 001r rrrr 0001 $width 2 $syntax ST Z+, Rr $name StoreIndirectDataSpacePostIncrementZ
+1001 001r rrrr 0010 $width 2 $syntax ST -Z, Rr $name StoreIndirectDataSpacePreDecrementZ
+1001 001d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax STS k,Rr $name StoreDirectDataSpace
+0001 10rd dddd rrrr $width 2 $syntax SUB Rd,Rr $name SubtractWithoutCarry
+0101 KKKK dddd KKKK $width 2 $syntax SUBI Rd,K $name SubtractImmediate
+1001 010d dddd 0010 $width 2 $syntax SWAP Rd $name SwapNibbles
+1001 0101 1010 1000 $width 2 $syntax WDR $name WatchdogReset
+1001 001r rrrr 0100 $width 2 $syntax XCH Z,Rd $name Exchange
+1000 qq0d dddd 1qqq $width 2 $syntax LDD Rd, Y+q $name LoadIndirectWithDisplacementY
+1000 qq0d dddd 0qqq $width 2 $syntax LDD Rd, Z+q $name LoadIndirectWithDisplacementZ
+1000 qq1r rrrr 1qqq $width 2 $syntax STD Y+q, Rr $name StoreIndirectWithDisplacementY
+1000 qq1r rrrr 0qqq $width 2 $syntax STD Z+q, Rr $name StoreIndirectWithDisplacementZ
+#############################################
+1010 qqfr rrrr aqqq $width 2 $syntax STD Y+q, Rr $name LoadStoreIndirectWithHightDisplacement $map.a 0=Y 1=Z $map.f 0=Load 1=Store
+1010 fkkk dddd kkkk $width 2 $syntax LDS Rd,k $name LoadStoreDirectFromDataSpaceShort $map.f 0=Load 1=Store
+# 1000 001r rrrr 1000 $width 2 $syntax ST Y, Rr $pseudo STD Y+q, Rr
+# 1000 000d dddd 1000 $width 2 $syntax LD Rd, Y $name LoadIndirectFromDataSpaceIndexY $pseudo LDD Rd, Y+q
+# 1000 000d dddd 0000 $width 2 $syntax LD Rd, Z $name LoadIndirectFromDataSpaceIndexZ $pseudo LDD Rd, Z+q
+# 1000 001r rrrr 0000 $width 2 $syntax ST Z, Rr $pseudo STD Z+q
+####

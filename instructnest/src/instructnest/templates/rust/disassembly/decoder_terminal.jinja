@@ -1,0 +1,21 @@
+{
+{% for closure in closure_gates %}
+    {{closure}}
+
+{% endfor %}
+    Ok((
+        {{enum_name}}::{{enum_variant}},
+    {% if fields %}
+        vec!(
+        {% for key, value in fields %}
+            ("{{key}}", {{value}})
+            {%- if not loop.last ,-%}
+                ,
+            {% endif %}
+        {% endfor %}
+        )
+    {% else %}
+        vec!(),
+    {% endif %}
+    ))
+}

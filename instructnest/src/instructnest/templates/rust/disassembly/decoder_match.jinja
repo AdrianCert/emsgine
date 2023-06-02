@@ -1,0 +1,6 @@
+match {{action}} & {{variable}}[0] {
+    {% for bch, stm in branches -%}
+        {{br_indent}}{{bch}} => {{stm}},
+    {% endfor -%}
+    {{br_indent}}_ => {{default}}
+{{m_indent}}}

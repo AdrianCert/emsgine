@@ -1,0 +1,8 @@
+macro_rules! {{macro_name}} {
+    {% for item, action in rules %}
+
+    ($v:expr, $t:tt[ {{item}} ]) => {
+        ({{action}}) as $t
+    };
+    {% endfor -%}
+}

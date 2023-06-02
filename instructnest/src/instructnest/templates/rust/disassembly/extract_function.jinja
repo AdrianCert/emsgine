@@ -1,0 +1,28 @@
+use std::collections::HashMap;
+use super::instructions::{{enum_name}};
+
+
+{{extract_macro}}
+
+
+pub fn extract(instruction: &{{enum_name}}, {{variable}}: u8) -> HashMap<&str, u8> {
+    return match instruction {
+    {% for variant, fields in enum_variants %}
+        {{enum_name}}::{{variant}} =>{{ ' ' }}
+        {%- if fields -%}
+            HashMap::from([
+        {% for val, tt, msk in fields %}
+            ("{{val}}", {{macro_name}}!({{variable}}, {{tt}}[{{msk}}]))
+            {%- if not loop.last -%}
+                ,
+            {% endif %}
+        {% endfor %}
+
+        ]),
+        {% else -%}
+            HashMap::new(),
+        {% endif -%}
+    {% endfor %}
+        {{enum_name}}::Invalid => None
+    };
+}

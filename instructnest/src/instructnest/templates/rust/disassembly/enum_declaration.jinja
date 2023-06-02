@@ -1,0 +1,13 @@
+#[derive(Debug)]
+pub enum {{enum_name}} {
+    {% for variant, contructor, comment in enum_variants %}
+    {{variant}}
+        {%- if contructor -%}
+            {{" {" + contructor + " }"}}
+        {%- endif %},
+        {%- if comment -%}
+            {{" //" + comment}}
+        {% endif %}
+    {% endfor %}
+    Invalid
+}

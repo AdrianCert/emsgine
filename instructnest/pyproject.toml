@@ -1,0 +1,51 @@
+[project]
+name = "instructnest"
+version = "1.0.0"
+description = "instruction-set optimizer path decoder cpu"
+readme = "readme.md"
+requires-python = ">=3.7"
+keywords = ["instruction", "set", "cpu", "optimizer", "path", "decoder", "cpu"]
+authors = [
+  {name = "Adrian Valentin Panaintescu", email = "adrian.cert@gmail.com"}
+]
+
+maintainers = [
+  {name = "Adrian Valentin Panaintescu", email = "adrian.cert@gmail.com"}
+]
+
+classifiers = [  # Optional
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3 :: Only",
+]
+
+dependencies = [
+  "jinja2"
+]
+
+# [project.optional-dependencies] # Optional
+# dev = ["check-manifest"]
+# test = ["coverage"]
+
+# [project.urls]  # Optional
+# "Homepage" = "https://github.com/pypa/sampleproject"
+# "Bug Reports" = "https://github.com/pypa/sampleproject/issues"
+# "Funding" = "https://donate.pypi.org"
+# "Say Thanks!" = "http://saythanks.io/to/example"
+# "Source" = "https://github.com/pypa/sampleproject/"
+
+# [project.scripts]  # Optional
+# sample = "sample:main"
+
+# [tool.setuptools]
+# package-data = {"sample" = ["*.dat"]}
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
