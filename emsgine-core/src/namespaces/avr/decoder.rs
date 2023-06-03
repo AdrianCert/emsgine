@@ -1,4 +1,4 @@
-// generated-code: 2023-05-27T11:50:23.500925
+// generated-code: 2023-06-03T10:04:00.137529
 
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
@@ -6,75 +6,75 @@ use emsgine_lib::models::bytes::DataWordSized;
 macro_rules! extract_bitcoded {
 
     ($v:expr, $t:tt[ 0x20f ]) => {
-        ($v[0] & 0xf | ($v[0] & 0x200) >> 5) as $t
+        (($v[0]) & 0xf | (($v[0]) & 0x200) >> 5) as $t
     };
 
     ($v:expr, $t:tt[ 0x1f0 ]) => {
-        (($v[0] & 0x1f0) >> 4) as $t
+        ((($v[0]) & 0x1f0) >> 4) as $t
     };
 
     ($v:expr, $t:tt[ 0x70 ]) => {
-        (($v[0] & 0x70) >> 4) as $t
+        ((($v[0]) & 0x70) >> 4) as $t
     };
 
     ($v:expr, $t:tt[ 0x7 ]) => {
-        ($v[0] & 0x7) as $t
+        (($v[0]) & 0x7) as $t
     };
 
     ($v:expr, $t:tt[ 0xf0 ]) => {
-        (($v[0] & 0xf0) >> 4) as $t
+        ((($v[0]) & 0xf0) >> 4) as $t
     };
 
     ($v:expr, $t:tt[ 0xf ]) => {
-        ($v[0] & 0xf) as $t
+        (($v[0]) & 0xf) as $t
     };
 
     ($v:expr, $t:tt[ 0xcf ]) => {
-        ($v[0] & 0xf | ($v[0] & 0xc0) >> 2) as $t
+        (($v[0]) & 0xf | (($v[0]) & 0xc0) >> 2) as $t
     };
 
     ($v:expr, $t:tt[ 0x30 ]) => {
-        (($v[0] & 0x30) >> 4) as $t
+        ((($v[0]) & 0x30) >> 4) as $t
     };
 
     ($v:expr, $t:tt[ 0x1f1ffff ]) => {
-        (($v[1] as u32 & 0xffff) >> 16 | $v[0] as u32 & 0x1 | ($v[0] as u32 & 0x1f0) >> 3) as $t
+        (($v[1] as u32) & 0xffff | (($v[0] as u32) & 0x1) << 16 | (($v[0] as u32) & 0x1f0) << 13) as $t
     };
 
     ($v:expr, $t:tt[ 0xf8 ]) => {
-        (($v[0] & 0xf8) >> 3) as $t
+        ((($v[0]) & 0xf8) >> 3) as $t
     };
 
     ($v:expr, $t:tt[ 0xffff ]) => {
-        (($v[1] as u32 & 0xffff) >> 16) as $t
+        (($v[1] as u32) & 0xffff) as $t
     };
 
     ($v:expr, $t:tt[ 0xf0f ]) => {
-        ($v[0] & 0xf | ($v[0] & 0xf00) >> 4) as $t
+        (($v[0]) & 0xf | (($v[0]) & 0xf00) >> 4) as $t
     };
 
     ($v:expr, $t:tt[ 0x3f8 ]) => {
-        (($v[0] & 0x3f8) >> 3) as $t
+        ((($v[0]) & 0x3f8) >> 3) as $t
     };
 
     ($v:expr, $t:tt[ 0x60f ]) => {
-        ($v[0] & 0xf | ($v[0] & 0x600) >> 5) as $t
+        (($v[0]) & 0xf | (($v[0]) & 0x600) >> 5) as $t
     };
 
     ($v:expr, $t:tt[ 0xfff ]) => {
-        ($v[0] & 0xfff) as $t
+        (($v[0]) & 0xfff) as $t
     };
 
     ($v:expr, $t:tt[ 0xc07 ]) => {
-        ($v[0] & 0x7 | ($v[0] & 0xc00) >> 7) as $t
+        (($v[0]) & 0x7 | (($v[0]) & 0xc00) >> 7) as $t
     };
 
     ($v:expr, $t:tt[ 0x2 ]) => {
-        (($v[0] & 0x200) >> 9) as $t
+        ((($v[0]) & 0x200) >> 9) as $t
     };
 
     ($v:expr, $t:tt[ 0x8 ]) => {
-        (($v[0] & 0x8) >> 3) as $t
+        ((($v[0]) & 0x8) >> 3) as $t
     };
 }
 

@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import Callable
 from typing import TypedDict
+
+from instructnest.common import OPERANDS_TRANSLATED_TYPES_SIZE
 from instructnest.utils import all_d1cluters
 from instructnest.utils import compute_bitmask
 
@@ -24,15 +26,6 @@ OPERANDS_TRANSLATED_NAMES_MAP: dict[str, str] = {
     "A": "rio",
 }
 
-OPERANDS_TRANSLATED_TYPES_SIZE: dict[int, str] = dict(
-    enumerate([
-        "u8",
-        "u16",
-        "u32",
-        "u64",
-        "u128"
-    ])
-)
 
 
 class OperandsExtractResultType(TypedDict):
@@ -95,14 +88,17 @@ class InstructionPattern:
         exr = {
             "operands": ops,
             "extractors": {
-                compute_bitmask(v):list(BitcodedExtractorGenerator.frombitset(v, self.width * 8 - 1, word_size)) for k,v in ops.items()
+                compute_bitmask(v):dict(
+                    components=list(BitcodedExtractorGenerator.frombitset(v, word_size)),
+                    capacity=len(ops[k])
+                ) for k,v in ops.items()
             },
             "masks": {
                 k:compute_bitmask(v) for k,v in ops.items()
             },
             "types": {
                 k:self.data.get(f"op_type.{k}") or (
-                    OPERANDS_TRANSLATED_TYPES_SIZE.get(len(ops[k]) // 8) or "u8"
+                    OPERANDS_TRANSLATED_TYPES_SIZE.get(len(ops[k]) // 8 + 1) or "u8"
                 ) for k in ops
             }
         }
@@ -112,7 +108,7 @@ class InstructionPattern:
 class BitcodedExtractorGenerator:
 
     @staticmethod
-    def frombitset(bitset, imp_bits, word_size=2):
+    def frombitset(bitset, word_size=2):
         b_overview: dict[int, list[int]]= {}
         for b_clt in all_d1cluters(bitset):
             b_max = max(b_clt)
@@ -127,7 +123,7 @@ class BitcodedExtractorGenerator:
                 b_comp_bset: list[int] = words_parts[b_comp_word]
                 b_comp_lead: int = max(b_comp_bset)
                 b_comp_mask: str = compute_bitmask(b_comp_bset, capacity=bmsk_capacity)
-                b_comp_dist: int = imp_bits - lsb_cursor - b_comp_lead
+                b_comp_dist: int = bmsk_capacity - lsb_cursor - b_comp_lead
                 lsb_cursor += len(words_parts[b_comp_word])
                 yield b_comp_mask, b_comp_dist, b_comp_word
 

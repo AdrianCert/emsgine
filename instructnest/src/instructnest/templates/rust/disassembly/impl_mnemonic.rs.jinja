@@ -1,0 +1,9 @@
+impl MnemonicInstruction for {{enum_name}} {
+    fn mnemonic<'a>(&self) -> &'a str {
+        match self {
+        {% for enum_variant, mnemonic in enum_variants %}
+            {{enum_name}}::{{enum_variant}} => "{{mnemonic}}",
+        {% endfor %}
+        }
+    }
+}

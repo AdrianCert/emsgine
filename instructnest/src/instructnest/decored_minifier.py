@@ -209,7 +209,7 @@ class InstructionDecoderDeviceMinimisation:
         sc_decisions = {k:self.rf_strategy.evaluate_tracer(v['trace']) for k,v in tr_decisions.items()}
 
         best_decision = min(sc_decisions, key=sc_decisions.get)
-        Path("result.json").write_text(json.dumps(tr_decisions[best_decision], indent=2))
+        # Path("result.json").write_text(json.dumps(tr_decisions[best_decision], indent=2))
         return tr_decisions[best_decision]
 
 

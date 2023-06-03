@@ -4,10 +4,10 @@ from functools import cached_property
 from pathlib import Path
 
 from instructnest.codegen import jinja_template
+from instructnest.common import OPERANDS_TRANSLATED_TYPES_SIZE
 from instructnest.instpatern import InstructionPattern
 from instructnest.instpatern import OPERANDS_TRANSLATED_NAMES_MAP
 from instructnest.decored_minifier import InstructionDecoderDeviceMinimisation
-
 
 PSEUDO_TYPE_MAP = {
     "u8": "u8",
@@ -106,6 +106,11 @@ class InstructionDecoderGenerator:
         return "enum_declaration"
 
     @cached_property
+    @jinja_template
+    def template_impl_mnemonic(self):
+        return "impl_mnemonic.rs"
+
+    @cached_property
     def template_data_word_sized(self):
         return f"{self.enum_datawordsized}::" + "{variant}({constructor})"
 
@@ -171,15 +176,41 @@ class InstructionDecoderGenerator:
             mask=mask
         )
 
+    def render_expr_extract_bits(self, components, capacity):
+        cast = None
+        if capacity >= self.word_size * 8:
+            cast = OPERANDS_TRANSLATED_TYPES_SIZE[capacity // 8 + 1]
+
+        def rnd_line(msk, sft, wrd):
+            exp = f"$v[{wrd}]"
+
+            # casting
+            if cast:
+                exp = f"{exp} as {cast}"
+
+            # apply bitmask
+            if msk != hex(self.word_size * 8):
+                exp = f"({exp}) & {msk}"
+
+            # shiting
+            if sft > 0:
+                exp = f"({exp}) >> {sft}"
+            if sft < 0:
+                exp = f"({exp}) << {-sft}"
+
+            return exp
+
+        return " | ".join([rnd_line(*i) for i in components])
+
     def render_value_extactor_macro(self):
         return self.template_value_extactor_macro.render(
             macro_name=self.bitcoded_macro_name,
             rules=[(
-                item," | ".join([
-                    (
-                        f"($v[{wrd}] & {msk}) >> {sft}" if sft else f"$v[{wrd}] & {msk}"
-                    ) for msk, sft, wrd in action
-                ])
+                item,
+                self.render_expr_extract_bits(
+                    action["components"],
+                    action["capacity"],
+                )
             ) for item, action in self.value_extractors.items()]
         )
 
@@ -200,8 +231,26 @@ class InstructionDecoderGenerator:
             enum_variants=[(
                 variant,
                 "" if self.ignore_enum_fields else ", ".join([f"{v}: {t}" for v, t in vairant_data["fields"].items()]),
-                "bra bla"
+                vairant_data["syntax"]
             ) for variant, vairant_data in self.enum_variants.items()]
+        )
+
+    def render_impl_instnamespace(self):
+        return f"impl InstructionNamespace for {self.enum_instuctionset} " + "{}"
+
+    def render_impl_mnemonic(self):
+        return self.template_impl_mnemonic.render(
+            enum_name=self.enum_instuctionset,
+            enum_variants=[(
+                variant,
+                vairant_data["mnemonic"]
+            ) for variant, vairant_data in self.enum_variants.items()]
+        )
+
+    def render_module(self, use_statements, decl_blocks):
+        return "{}\n\n{}\n".format(
+            "\n".join(use_statements),
+            "\n\n".join(decl_blocks),
         )
 
     def convert_branch_key(self, key: str):
@@ -226,7 +275,11 @@ class InstructionDecoderGenerator:
         patern = InstructionPattern.fromstr(data)
         operands = patern.compute_operands_extract(self.word_size)
         self.value_extractors.update(operands["extractors"])
-        self.enum_variants[patern.name] = operands
+        self.enum_variants[patern.name] = dict(
+            **operands,
+            syntax=patern.syntax,
+            mnemonic=patern.syntax.split()[0]
+        )
 
         enum_instace_parameters = {
             OPERANDS_TRANSLATED_NAMES_MAP.get(k, k):(
@@ -326,14 +379,24 @@ class InstructionDecoderGenerator:
         rs_matcher = self.eval_match_level(self.input['trace'], 1)
         rs_extactor_macro = self.render_value_extactor_macro()
         rs_decoder_function = self.render_decoder_function("decode", rs_matcher, rs_extactor_macro)
-        rs_enum_declaration = self.render_enum_declaration()
+
+        rs_instruction_module = self.render_module(
+            use_statements=[
+                "use emsgine_lib::models::instructionset::{InstructionNamespace, MnemonicInstruction};"
+            ],
+            decl_blocks=[
+                self.render_enum_declaration(),
+                self.render_impl_instnamespace(),
+                self.render_impl_mnemonic()
+            ]
+        )
         # rs_extract_function = self.render_extract_function(rs_extactor_macro)
 
         rs_generated_tag = f"// generated-code: {datetime.now().isoformat()}\n\n"
 
         target_dir = Path(settings.target)
         target_dir.joinpath("decoder.rs").write_text(rs_generated_tag + rs_decoder_function)
-        target_dir.joinpath("instructions.rs").write_text(rs_generated_tag + rs_enum_declaration)
+        target_dir.joinpath("instructions.rs").write_text(rs_generated_tag + rs_instruction_module)
         # target_dir.joinpath("extract.rs").write_text(rs_extract_function)
 
 

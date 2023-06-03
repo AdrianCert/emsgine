@@ -15,7 +15,6 @@ pub use cpu::{AddressPointer, CentralProcessUnit};
 // pub use cpu::CentralProcessUnit;
 pub use cpu::ENDIANNESS;
 use decoder::decode;
-impl InstructionNamespace for AvrInstructionSet {}
 
 struct DecoderDevice {}
 
