@@ -112,7 +112,7 @@ class InstructionDecoderDeviceMinimisation:
     def __init__(self, bits_map = RF_BITS_MAP, strategy:MinimisationStrategy = MinimisationStrategies.grouped):
         self.rf_bits_len = len(bits_map)
         self.rf_bits_map = bits_map
-        self.rf_gen = PartitionActionBitmaskGenerator(self.rf_bits_map)
+        self.rf_gen = PartitionActionBitmaskGenerator(self.rf_bits_map, capacity=self.rf_bits_len-1)
         self.rf_strategy = strategy
 
     def compute_candidates_bits(self, dataset, skip_set=set(), print_bracker=False):

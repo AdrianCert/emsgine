@@ -1,4 +1,4 @@
-// generated-code: 2023-06-03T10:04:00.137529
+// generated-code: 2023-06-04T12:22:21.585314
 
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
@@ -79,9 +79,9 @@ macro_rules! extract_bitcoded {
 }
 
 pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, DataWordSized)>), u8> {
-    return match 0xf0 & inst[0] {
-        0x10 => match 0xc & inst[0] {
-            0xc => {
+    return match 0xf000 & inst[0] {
+        0x1000 => match 0xc00 & inst[0] {
+            0xc00 => {
                 Ok((
                     AvrInstructionSet::AddWithCarry,
                     vec!(
@@ -90,7 +90,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x4 => {
+            0x400 => {
                 Ok((
                     AvrInstructionSet::Compare,
                     vec!(
@@ -108,7 +108,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x8 => {
+            0x800 => {
                 Ok((
                     AvrInstructionSet::SubtractWithoutCarry,
                     vec!(
@@ -119,8 +119,8 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0x0 => match 0xc & inst[0] {
-            0xc => {
+        0x0 => match 0xc00 & inst[0] {
+            0xc00 => {
                 Ok((
                     AvrInstructionSet::Add,
                     vec!(
@@ -129,7 +129,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x4 => {
+            0x400 => {
                 Ok((
                     AvrInstructionSet::CompareWithCarry,
                     vec!(
@@ -138,8 +138,8 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x0 => match 0x3 & inst[0] {
-                0x3 => match 0x80 & inst[0] {
+            0x0 => match 0x300 & inst[0] {
+                0x300 => match 0x80 & inst[0] {
                     0x0 => match 0x8 & inst[0] {
                         0x8 => {
                             Ok((
@@ -184,7 +184,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     },
                     _ => Err(0u8)
                 },
-                0x1 => {
+                0x100 => {
                     Ok((
                         AvrInstructionSet::CopyRegisterWord,
                         vec!(
@@ -193,7 +193,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::MultiplySigned,
                         vec!(
@@ -210,7 +210,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0x8 => {
+            0x800 => {
                 Ok((
                     AvrInstructionSet::SubtractWithCarry,
                     vec!(
@@ -221,9 +221,9 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0x90 => match 0xc & inst[0] {
-            0x4 => match 0x2 & inst[0] {
-                0x2 => match 0x1 & inst[0] {
+        0x9000 => match 0xc00 & inst[0] {
+            0x400 => match 0x200 & inst[0] {
+                0x200 => match 0x100 & inst[0] {
                     0x0 => {
                         Ok((
                             AvrInstructionSet::AddWithImmediate,
@@ -233,7 +233,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             )
                         ))
                     },
-                    0x1 => {
+                    0x100 => {
                         Ok((
                             AvrInstructionSet::SubtractImmediateWord,
                             vec!(
@@ -333,7 +333,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             },
                             _ => Err(0u8)
                         },
-                        0x1 => match 0x70 & inst[0] {
+                        0x100 => match 0x70 & inst[0] {
                             0x10 => match 0x1 & inst[0] {
                                 0x1 => {
                                     Ok((
@@ -472,7 +472,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0x8 => match 0x3 & inst[0] {
+            0x800 => match 0x300 & inst[0] {
                 0x0 => {
                     Ok((
                         AvrInstructionSet::ClearIOBit,
@@ -482,7 +482,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::SetBitIoSpace,
                         vec!(
@@ -491,7 +491,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x1 => {
+                0x100 => {
                     Ok((
                         AvrInstructionSet::SkipIfIoBitCleared,
                         vec!(
@@ -500,7 +500,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x3 => {
+                0x300 => {
                     Ok((
                         AvrInstructionSet::SkipIfIoBitSet,
                         vec!(
@@ -511,7 +511,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0x0 => match 0x2 & inst[0] {
+            0x0 => match 0x200 & inst[0] {
                 0x0 => match 0xf & inst[0] {
                     0x6 => {
                         Ok((
@@ -624,7 +624,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     },
                     _ => Err(0u8)
                 },
-                0x2 => match 0xf & inst[0] {
+                0x200 => match 0xf & inst[0] {
                     0x6 => {
                         Ok((
                             AvrInstructionSet::LoadAndClear,
@@ -738,7 +738,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0xc => {
+            0xc00 => {
                 Ok((
                     AvrInstructionSet::MultiplyUnsigned,
                     vec!(
@@ -749,7 +749,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0x20 => match 0xc & inst[0] {
+        0x2000 => match 0xc00 & inst[0] {
             0x0 => {
                 Ok((
                     AvrInstructionSet::LogicalAnd,
@@ -759,7 +759,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x4 => {
+            0x400 => {
                 Ok((
                     AvrInstructionSet::LogicalExclusiveOr,
                     vec!(
@@ -768,7 +768,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0xc => {
+            0xc00 => {
                 Ok((
                     AvrInstructionSet::CopyRegister,
                     vec!(
@@ -777,7 +777,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x8 => {
+            0x800 => {
                 Ok((
                     AvrInstructionSet::LogicalOr,
                     vec!(
@@ -788,7 +788,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0x70 => {
+        0x7000 => {
             Ok((
                 AvrInstructionSet::LogicalAndWithImmediate,
                 vec!(
@@ -797,8 +797,8 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0xf0 => match 0xc & inst[0] {
-            0x8 => match 0x2 & inst[0] {
+        0xf000 => match 0xc00 & inst[0] {
+            0x800 => match 0x200 & inst[0] {
                 0x0 => {
                     Ok((
                         AvrInstructionSet::BitLoadInRegisterfromT,
@@ -808,7 +808,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::BitStorefromRegister,
                         vec!(
@@ -819,7 +819,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0x4 => {
+            0x400 => {
                 Ok((
                     AvrInstructionSet::BranchSregBitCleared,
                     vec!(
@@ -837,7 +837,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0xc => match 0x2 & inst[0] {
+            0xc00 => match 0x200 & inst[0] {
                 0x0 => {
                     Ok((
                         AvrInstructionSet::SkipIfBitCleared,
@@ -847,7 +847,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::SkipIfBitSet,
                         vec!(
@@ -860,7 +860,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0x30 => {
+        0x3000 => {
             Ok((
                 AvrInstructionSet::CompareWithImmediate,
                 vec!(
@@ -869,7 +869,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0xb0 => match 0x8 & inst[0] {
+        0xb000 => match 0x800 & inst[0] {
             0x0 => {
                 Ok((
                     AvrInstructionSet::LoadFromIOSpace,
@@ -879,7 +879,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     )
                 ))
             },
-            0x8 => {
+            0x800 => {
                 Ok((
                     AvrInstructionSet::StoreToIoSpace,
                     vec!(
@@ -890,7 +890,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0xe0 => {
+        0xe000 => {
             Ok((
                 AvrInstructionSet::LoadImmediate,
                 vec!(
@@ -899,7 +899,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0x60 => {
+        0x6000 => {
             Ok((
                 AvrInstructionSet::LogicalOrWithImmediate,
                 vec!(
@@ -908,7 +908,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0xd0 => {
+        0xd000 => {
             Ok((
                 AvrInstructionSet::RelativeCallSubroutine,
                 vec!(
@@ -916,7 +916,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0xc0 => {
+        0xc000 => {
             Ok((
                 AvrInstructionSet::RelativeJump,
                 vec!(
@@ -924,7 +924,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0x40 => {
+        0x4000 => {
             Ok((
                 AvrInstructionSet::SubtractImmediateWithCarrySbi,
                 vec!(
@@ -933,7 +933,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0x50 => {
+        0x5000 => {
             Ok((
                 AvrInstructionSet::SubtractImmediate,
                 vec!(
@@ -942,8 +942,8 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 )
             ))
         },
-        0x80 => match 0x8 & inst[0] {
-            0x8 => match 0x2 & inst[0] {
+        0x8000 => match 0x8 & inst[0] {
+            0x8 => match 0x200 & inst[0] {
                 0x0 => {
                     Ok((
                         AvrInstructionSet::LoadIndirectWithDisplacementY,
@@ -953,7 +953,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::StoreIndirectWithDisplacementY,
                         vec!(
@@ -964,7 +964,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 },
                 _ => Err(0u8)
             },
-            0x0 => match 0x2 & inst[0] {
+            0x0 => match 0x200 & inst[0] {
                 0x0 => {
                     Ok((
                         AvrInstructionSet::LoadIndirectWithDisplacementZ,
@@ -974,7 +974,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         )
                     ))
                 },
-                0x2 => {
+                0x200 => {
                     Ok((
                         AvrInstructionSet::StoreIndirectWithDisplacementZ,
                         vec!(
@@ -987,7 +987,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             },
             _ => Err(0u8)
         },
-        0xa0 => {
+        0xa000 => {
             Ok((
                 AvrInstructionSet::LoadStoreIndirectWithHightDisplacement,
                 vec!(

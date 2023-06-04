@@ -4,6 +4,7 @@ impl MnemonicInstruction for {{enum_name}} {
         {% for enum_variant, mnemonic in enum_variants %}
             {{enum_name}}::{{enum_variant}} => "{{mnemonic}}",
         {% endfor %}
+            {{enum_name}}::Invalid => "???"
         }
     }
 }

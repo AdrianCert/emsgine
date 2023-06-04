@@ -1,4 +1,4 @@
-// generated-code: 2023-06-03T10:04:00.137529
+// generated-code: 2023-06-04T12:22:21.585314
 
 use emsgine_lib::models::instructionset::{InstructionNamespace, MnemonicInstruction};
 
@@ -208,6 +208,7 @@ impl MnemonicInstruction for AvrInstructionSet {
             AvrInstructionSet::LoadIndirectWithDisplacementZ => "LDD",
             AvrInstructionSet::StoreIndirectWithDisplacementZ => "STD",
             AvrInstructionSet::LoadStoreIndirectWithHightDisplacement => "STD",
+            AvrInstructionSet::Invalid => "???"
         }
     }
 }

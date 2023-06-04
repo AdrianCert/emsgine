@@ -2,10 +2,6 @@ pub mod action;
 mod decoder;
 pub mod instructions;
 
-use emsgine_lib::models::instructionset::InstructionNamespace;
-
-// pub mod actions;
-
 pub use instructions::AvrInstructionSet;
 mod cpu;
 
@@ -56,6 +52,7 @@ mod tests {
     use std::rc::Rc;
 
     use emsgine_lib::models::bytes::DataWordSized;
+    use emsgine_lib::models::instructionset::MnemonicInstruction;
 
     use super::AddressPointer;
     use super::CentralProcessUnit;
@@ -92,13 +89,20 @@ mod tests {
         println!("cpu sate: {cpu:?}", cpu=cpu);
 
         let mut x = 0;
-        while x <= 200 {
+        while x <= 0x039c / 2 {
             let decoded = decoder.decode(&mut cpu);
             let addr = cpu.states_get("PC");
             cpu.states_update("PC", |x| {
                 DataWordSized::DataSizeWord(x.as_u16() + 2)
             });
-            println!("Result: {:?} >> {:?}", addr, decoded);
+            let mem =cpu.memory_pull(AddressPointer::ProgramSpace(addr.as_u16().into()), 2);
+            let val1 = mem[0];
+            let val2 = mem[1];
+
+            if let Some(ins) = decoded {
+                let (ins, ops) = ins;
+                println!("0x{:04x} {:02x} {:02x} >> {} {:?}", addr.as_u16(), val1, val2, ins.mnemonic(), ops);
+            }
             x += 1;
         }
     }

@@ -42,13 +42,14 @@ class PartitionAction:
         )
 
 class PartitionActionBitmaskGenerator:
-    def __init__(self, bit_map):
+    def __init__(self, bit_map, capacity=None):
         self.bit_map = bit_map
+        self.capacity = capacity
 
     def __call__(self, bits) -> PartitionAction:
-        mch_name = "match " + compute_bitmask(bits)
+        mch_name = "match " + compute_bitmask(bits, capacity=self.capacity)
         def partition_function(item):
-            return f"{mch_name}::<{compute_bitmask([i for i in bits if item[self.bit_map[i]] == '1'])}>"
+            return f"{mch_name}::<{compute_bitmask([i for i in bits if item[self.bit_map[i]] == '1'], capacity=self.capacity)}>"
             # return f"{mch_name}::<{''.join([item[self.bit_map[bit]] for bit in bits])}>"
 
         return PartitionAction(partition_function, mch_name, {
