@@ -1,0 +1,31 @@
+impl FormatInstruction for {{enum_name}} {
+    fn formatstr<'a>(&self) -> &'a str {
+        match self {
+        {% for enum_variant, formatstr in enum_variants %}
+            {{enum_name}}::{{enum_variant}} => "{{formatstr[0]}}",
+        {% endfor %}
+            {{enum_name}}::Invalid => "???"
+        }
+    }
+
+    fn format<'a>(&self, ltbl: &'a dyn Lookup<&str, DataWordSized>) -> String {
+        match self {
+        {% for enum_variant, formatstr in enum_variants %}
+            {{enum_name}}::{{enum_variant}} =>
+                {%- if formatstr[1] -%}
+                    {{" "}}format!("{{formatstr[0]}}",
+                        {%- for farg in formatstr[1] -%}
+                            {{" "}}safe_lookup![ltbl, "{{farg}}"]
+                            {%- if not loop.last -%}
+                                ,
+                            {%- endif -%}
+                        {%- endfor -%}
+                        ),
+                {% else -%}
+                    format!("{{formatstr[0]}}"),
+                {% endif -%}
+        {% endfor %}
+            {{enum_name}}::Invalid => format!("???")
+        }
+    }
+}

@@ -1,9 +1,11 @@
+// use std::default;
+
 pub enum EndianByteOrdering {
     LittleEndian,
     BitEndian,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 pub enum DataWordSized {
     DataSizeByte(u8),
     DataSizeWord(u16),
@@ -13,6 +15,7 @@ pub enum DataWordSized {
     DataSizeSignedWord(i16),
     DataSizeSignedDouble(i32),
     DataSizeSignedLong(i64),
+    #[default]
     Invalid,
 }
 
@@ -61,6 +64,28 @@ impl From<i32> for DataWordSized {
 impl From<i64> for DataWordSized {
     fn from(value: i64) -> Self {
         DataWordSized::DataSizeSignedLong(value)
+    }
+}
+
+impl std::fmt::Display for DataWordSized {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DataWordSized::DataSizeByte(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeWord(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeDouble(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeLong(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeSignedByte(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeSignedWord(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeSignedDouble(x) => write!(f, "{}", x),
+            DataWordSized::DataSizeSignedLong(x) => write!(f, "{}", x),
+            DataWordSized::Invalid => write!(f, "#$?"),
+        }
+    }
+}
+
+impl Default for &DataWordSized {
+    fn default() -> Self {
+        &DataWordSized::Invalid
     }
 }
 

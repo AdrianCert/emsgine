@@ -1,4 +1,4 @@
-// generated-code: 2023-06-04T15:41:59.864475
+// generated-code: 2023-06-04T23:12:57.029690
 
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
@@ -715,7 +715,10 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         Ok((
                             AvrInstructionSet::PushRegisterToStack,
                             vec!(
-                                ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0]))),
+                                ("rds", DataWordSized::DataSizeSignedByte({
+                                    let ext = extract_bitcoded!(inst, u8[0x1f0]);
+                                    -16 * ((0x10 & ext as i8) >> 4) + (0xf & ext as i8)
+                                })),
                             )
                         ))
                     },

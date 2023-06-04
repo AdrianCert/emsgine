@@ -4,6 +4,7 @@ pub mod bitwise;
 pub mod ast;
 pub mod primitive;
 pub mod contexts;
+pub mod lookup;
 
 // #[cfg(test)]
 // mod tests {

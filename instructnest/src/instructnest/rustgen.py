@@ -117,6 +117,11 @@ class InstructionDecoderGenerator:
         return "impl_mnemonic.rs"
 
     @cached_property
+    @jinja_template
+    def template_impl_format_inst(self):
+        return "impl_format_inst.rs"
+
+    @cached_property
     def template_data_word_sized(self):
         return f"{self.enum_datawordsized}::" + "{variant}({constructor})"
 
@@ -253,6 +258,15 @@ class InstructionDecoderGenerator:
             ) for variant, vairant_data in self.enum_variants.items()]
         )
 
+    def render_impl_format_inst(self):
+        return self.template_impl_format_inst.render(
+            enum_name=self.enum_instuctionset,
+            enum_variants=[(
+                variant,
+                vairant_data["formatstr"]
+            ) for variant, vairant_data in self.enum_variants.items()]
+        )
+
     def render_module(self, use_statements, decl_blocks):
         return "{}\n\n{}\n".format(
             "\n".join(use_statements),
@@ -333,7 +347,6 @@ class InstructionDecoderGenerator:
             if len(constructor) > 1:
                 str_constructor = "\n".join([f"{self.indent * 4}{i}" for i in constructor])
                 str_constructor = "{" + f"\n{str_constructor}\n{self.indent * 3}" + "}"
-                print(str_constructor)
 
             result[new_name] = self.template_data_word_sized.format(
                 variant=variant,
@@ -345,16 +358,24 @@ class InstructionDecoderGenerator:
 
     def eval_terminal_branch(self, data: str, level: int) -> str:
         patern = InstructionPattern.fromstr(data)
-        if patern.name == "AddWithImmediate":
-            print(patern)
 
         operands = patern.compute_operands_extract(self.word_size)
         patern.data['operands'] = operands
         self.value_extractors.update(operands["extractors"])
+
+        # compute format str
+        str_format = patern.syntax
+        opr = [c for c in str_format if c in operands['types']]
+        arg_format = []
+        for op in opr:
+            str_format = str_format.replace(op, "{}")
+            arg_format.append(OPERANDS_TRANSLATED_NAMES_MAP.get(op, op))
+
         self.enum_variants[patern.name] = dict(
             **operands,
             syntax=patern.syntax,
-            mnemonic=patern.syntax.split()[0]
+            mnemonic=patern.syntax.split()[0],
+            formatstr=(str_format, arg_format)
         )
 
         ins_param = self.eval_extraction_computation(patern, level)
@@ -451,12 +472,18 @@ class InstructionDecoderGenerator:
 
         rs_instruction_module = self.render_module(
             use_statements=[
-                "use emsgine_lib::models::instructionset::{InstructionNamespace, MnemonicInstruction};"
+                "use emsgine_lib::models::instructionset::InstructionNamespace;",
+                "use emsgine_lib::models::instructionset::MnemonicInstruction;",
+                "use emsgine_lib::models::instructionset::FormatInstruction;",
+                "use emsgine_lib::models::bytes::DataWordSized;",
+                "use emsgine_lib::lookup::Lookup;",
+                "use emsgine_lib::lookup::safe_lookup;",
             ],
             decl_blocks=[
                 self.render_enum_declaration(),
                 self.render_impl_instnamespace(),
-                self.render_impl_mnemonic()
+                self.render_impl_mnemonic(),
+                self.render_impl_format_inst(),
             ]
         )
         # rs_extract_function = self.render_extract_function(rs_extactor_macro)
