@@ -16,6 +16,15 @@ def dict_find(data, element):
     return reduce(operator.getitem, element.split('.'), data)
 
 
+def dict_insert(data, key: str, value: str):
+    *paths, key = key.split('.')
+    for path in paths:
+        if path not in data:
+            data[path] = {}
+        data = data[path]
+    data[key] = value
+
+
 def all_subsets(dataset):
     return chain(*map(lambda x: combinations(dataset, x), range(1, len(dataset)+1)))
 

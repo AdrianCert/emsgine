@@ -6,6 +6,7 @@ from typing import TypedDict
 
 from instructnest.common import OPERANDS_TRANSLATED_TYPES_SIZE
 from instructnest.utils import all_d1cluters
+from instructnest.utils import dict_insert
 from instructnest.utils import compute_bitmask
 
 
@@ -58,7 +59,7 @@ class InstructionPattern:
                 continue
 
             key, value = pair_items
-            data_dict[key] = value
+            dict_insert(data_dict, key, value)
             if key in annt:
                 data_fields[key] = try_cast(value, annt[key])
         for field in annt:

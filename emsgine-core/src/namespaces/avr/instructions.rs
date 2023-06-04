@@ -1,4 +1,4 @@
-// generated-code: 2023-06-04T12:22:21.585314
+// generated-code: 2023-06-04T15:41:59.864475
 
 use emsgine_lib::models::instructionset::{InstructionNamespace, MnemonicInstruction};
 

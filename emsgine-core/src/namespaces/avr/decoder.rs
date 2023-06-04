@@ -1,4 +1,4 @@
-// generated-code: 2023-06-04T12:22:21.585314
+// generated-code: 2023-06-04T15:41:59.864475
 
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
@@ -145,8 +145,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             Ok((
                                 AvrInstructionSet::FractionalMultiplyUnsigned,
                                 vec!(
-                                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x70]))),
-                                    ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
+                                    ("rds", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x70]);
+                                        ext += 16;
+                                        ext
+                                    })),
+                                    ("rsr", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x7]);
+                                        ext += 16;
+                                        ext
+                                    })),
                                 )
                             ))
                         },
@@ -154,8 +162,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             Ok((
                                 AvrInstructionSet::MultiplySignedWithUnsigned,
                                 vec!(
-                                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x70]))),
-                                    ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
+                                    ("rds", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x70]);
+                                        ext += 16;
+                                        ext
+                                    })),
+                                    ("rsr", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x7]);
+                                        ext += 16;
+                                        ext
+                                    })),
                                 )
                             ))
                         },
@@ -166,8 +182,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             Ok((
                                 AvrInstructionSet::FractionalMultiplySigned,
                                 vec!(
-                                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x70]))),
-                                    ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
+                                    ("rds", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x70]);
+                                        ext += 16;
+                                        ext
+                                    })),
+                                    ("rsr", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x7]);
+                                        ext += 16;
+                                        ext
+                                    })),
                                 )
                             ))
                         },
@@ -175,8 +199,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             Ok((
                                 AvrInstructionSet::FractionalMultiplySignedWithUnsigned,
                                 vec!(
-                                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x70]))),
-                                    ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
+                                    ("rds", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x70]);
+                                        ext += 16;
+                                        ext
+                                    })),
+                                    ("rsr", DataWordSized::DataSizeByte({
+                                        let mut ext = extract_bitcoded!(inst, u8[0x7]);
+                                        ext += 16;
+                                        ext
+                                    })),
                                 )
                             ))
                         },
@@ -188,8 +220,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     Ok((
                         AvrInstructionSet::CopyRegisterWord,
                         vec!(
-                            ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0]))),
-                            ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf]))),
+                            ("rds", DataWordSized::DataSizeByte({
+                                let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                                ext *= 2;
+                                ext
+                            })),
+                            ("rsr", DataWordSized::DataSizeByte({
+                                let mut ext = extract_bitcoded!(inst, u8[0xf]);
+                                ext *= 2;
+                                ext
+                            })),
                         )
                     ))
                 },
@@ -197,8 +237,16 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     Ok((
                         AvrInstructionSet::MultiplySigned,
                         vec!(
-                            ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0]))),
-                            ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf]))),
+                            ("rds", DataWordSized::DataSizeByte({
+                                let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                                ext += 16;
+                                ext
+                            })),
+                            ("rsr", DataWordSized::DataSizeByte({
+                                let mut ext = extract_bitcoded!(inst, u8[0xf]);
+                                ext += 16;
+                                ext
+                            })),
                         )
                     ))
                 },
@@ -229,7 +277,12 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             AvrInstructionSet::AddWithImmediate,
                             vec!(
                                 ("imd", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xcf]))),
-                                ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x30]))),
+                                ("rds", DataWordSized::DataSizeByte({
+                                    let mut ext = extract_bitcoded!(inst, u8[0x30]);
+                                    ext *= 2;
+                                    ext += 24;
+                                    ext
+                                })),
                             )
                         ))
                     },
@@ -238,7 +291,12 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                             AvrInstructionSet::SubtractImmediateWord,
                             vec!(
                                 ("imd", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xcf]))),
-                                ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x30]))),
+                                ("rds", DataWordSized::DataSizeByte({
+                                    let mut ext = extract_bitcoded!(inst, u8[0x30]);
+                                    ext *= 2;
+                                    ext += 24;
+                                    ext
+                                })),
                             )
                         ))
                     },
@@ -593,7 +651,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         Ok((
                             AvrInstructionSet::LoadDirectFromDataSpace,
                             vec!(
-                                ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0]))),
+                                ("rds", DataWordSized::DataSizeByte({
+                                    let mut ext = extract_bitcoded!(inst, u8[0x1f0]);
+                                    ext += 16;
+                                    ext
+                                })),
                                 ("k", DataWordSized::DataSizeDouble(extract_bitcoded!(inst, u32[0xffff]))),
                             )
                         ))
@@ -721,7 +783,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                         Ok((
                             AvrInstructionSet::StoreDirectDataSpace,
                             vec!(
-                                ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0]))),
+                                ("rds", DataWordSized::DataSizeByte({
+                                    let mut ext = extract_bitcoded!(inst, u8[0x1f0]);
+                                    ext += 16;
+                                    ext
+                                })),
                                 ("k", DataWordSized::DataSizeDouble(extract_bitcoded!(inst, u32[0xffff]))),
                             )
                         ))
@@ -755,7 +821,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                     AvrInstructionSet::LogicalAnd,
                     vec!(
                         ("rsr", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x20f]))),
-                        ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0]))),
+                        ("rds", DataWordSized::DataSizeByte({
+                            let mut ext = extract_bitcoded!(inst, u8[0x1f0]);
+                            ext += 16;
+                            ext
+                        })),
                     )
                 ))
             },
@@ -823,7 +893,10 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 Ok((
                     AvrInstructionSet::BranchSregBitCleared,
                     vec!(
-                        ("k", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x3f8]))),
+                        ("k", DataWordSized::DataSizeSignedByte({
+                            let ext = extract_bitcoded!(inst, u8[0x3f8]);
+                            -64 * ((0x40 & ext as i8) >> 6) + (0x3f & ext as i8)
+                        })),
                         ("s", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
                     )
                 ))
@@ -832,7 +905,10 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 Ok((
                     AvrInstructionSet::BranchSregBitSet,
                     vec!(
-                        ("k", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x3f8]))),
+                        ("k", DataWordSized::DataSizeSignedByte({
+                            let ext = extract_bitcoded!(inst, u8[0x3f8]);
+                            -64 * ((0x40 & ext as i8) >> 6) + (0x3f & ext as i8)
+                        })),
                         ("s", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x7]))),
                     )
                 ))
@@ -865,7 +941,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 AvrInstructionSet::CompareWithImmediate,
                 vec!(
                     ("imd", DataWordSized::DataSizeWord(extract_bitcoded!(inst, u16[0xf0f]))),
-                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0]))),
+                    ("rds", DataWordSized::DataSizeByte({
+                        let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                        ext += 16;
+                        ext
+                    })),
                 )
             ))
         },
@@ -904,7 +984,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 AvrInstructionSet::LogicalOrWithImmediate,
                 vec!(
                     ("imd", DataWordSized::DataSizeWord(extract_bitcoded!(inst, u16[0xf0f]))),
-                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0]))),
+                    ("rds", DataWordSized::DataSizeByte({
+                        let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                        ext += 16;
+                        ext
+                    })),
                 )
             ))
         },
@@ -920,7 +1004,10 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
             Ok((
                 AvrInstructionSet::RelativeJump,
                 vec!(
-                    ("k", DataWordSized::DataSizeWord(extract_bitcoded!(inst, u16[0xfff]))),
+                    ("k", DataWordSized::DataSizeSignedWord({
+                        let ext = extract_bitcoded!(inst, u16[0xfff]);
+                        -2048 * ((0x800 & ext as i16) >> 11) + (0x7ff & ext as i16)
+                    })),
                 )
             ))
         },
@@ -938,7 +1025,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, Vec<(&'a str, Da
                 AvrInstructionSet::SubtractImmediate,
                 vec!(
                     ("imd", DataWordSized::DataSizeWord(extract_bitcoded!(inst, u16[0xf0f]))),
-                    ("rds", DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0]))),
+                    ("rds", DataWordSized::DataSizeByte({
+                        let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                        ext += 16;
+                        ext
+                    })),
                 )
             ))
         },

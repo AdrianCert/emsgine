@@ -8,6 +8,8 @@ from instructnest.common import OPERANDS_TRANSLATED_TYPES_SIZE
 from instructnest.instpatern import InstructionPattern
 from instructnest.instpatern import OPERANDS_TRANSLATED_NAMES_MAP
 from instructnest.decored_minifier import InstructionDecoderDeviceMinimisation
+from instructnest.utils import compute_bitmask
+
 
 PSEUDO_TYPE_MAP = {
     "u8": "u8",
@@ -21,7 +23,11 @@ DATAWORD_SIZED_MAP = {
     "u8": "DataSizeByte",
     "u16": "DataSizeWord",
     "u32": "DataSizeDouble",
-    "u64": "DataSizeLong"
+    "u64": "DataSizeLong",
+    "i8": "DataSizeSignedByte",
+    "i16": "DataSizeSignedWord",
+    "i32": "DataSizeSignedDouble",
+    "i64": "DataSizeSignedLong",
 }
 
 
@@ -271,9 +277,79 @@ class InstructionDecoderGenerator:
             )
         )
 
+    def eval_extraction_computation(self, patten_data: InstructionPattern, level) -> dict[str, str]:
+        operands: dict[str, dict] = patten_data.data['operands']
+        etp = patten_data.data.get('etp', {})
+
+        result = {}
+
+        for k,v in operands['masks'].items():
+            new_name = OPERANDS_TRANSLATED_NAMES_MAP.get(k, k)
+            constructor=[self.render_extract_bitcoded(v, operands["types"][k])]
+            variant=DATAWORD_SIZED_MAP[operands["types"][k]]
+
+            if k in etp:
+                ctr = constructor[0]
+
+                need_mut = " | " in etp[k]
+                if not need_mut and etp[k].split()[0] not in ['cast']:
+                    need_mut = True
+
+                constructor = [f"let mut ext = {ctr};"] if need_mut else [f"let ext = {ctr};"]
+                need_end = True
+                for index, op in enumerate(etp[k].split(" | ")):
+                    op, opr = op.split()
+
+                    last_op = index + 1 == len(etp[k].split(" | "))
+
+                    if op=="offset":
+                        constructor.append(
+                            f"ext += {opr};"
+                        )
+                    if op=="mul":
+                        constructor.append(
+                            f"ext *= {opr};"
+                        )
+                    if op=="cast":
+                        if opr=="c2":
+                            capacity = len(operands['operands'][k])
+                            bs_ms, *bs_rs = list(range(1, capacity+1))
+                            msb = compute_bitmask([bs_ms], capacity=capacity)
+                            rsb = compute_bitmask(bs_rs, capacity=capacity)
+                            abs = f"-{2 ** (capacity - 1)}"
+                            cast_tt = f'i{operands["types"][k][1:]}'
+                            cast_op = f"{abs} * (({msb} & ext as {cast_tt}) >> {capacity - 1}) + ({rsb} & ext as {cast_tt})"
+                            variant = DATAWORD_SIZED_MAP[cast_tt]
+                            if last_op:
+                                constructor.append(cast_op)
+                                need_end = False
+                                continue
+                            constructor.append(f"let exp = {cast_op};")
+
+                if need_end:
+                    constructor.append("ext")
+
+            str_constructor = constructor[0]
+            if len(constructor) > 1:
+                str_constructor = "\n".join([f"{self.indent * 4}{i}" for i in constructor])
+                str_constructor = "{" + f"\n{str_constructor}\n{self.indent * 3}" + "}"
+                print(str_constructor)
+
+            result[new_name] = self.template_data_word_sized.format(
+                variant=variant,
+                constructor=str_constructor
+            )
+
+        return result
+
+
     def eval_terminal_branch(self, data: str, level: int) -> str:
         patern = InstructionPattern.fromstr(data)
+        if patern.name == "AddWithImmediate":
+            print(patern)
+
         operands = patern.compute_operands_extract(self.word_size)
+        patern.data['operands'] = operands
         self.value_extractors.update(operands["extractors"])
         self.enum_variants[patern.name] = dict(
             **operands,
@@ -281,14 +357,7 @@ class InstructionDecoderGenerator:
             mnemonic=patern.syntax.split()[0]
         )
 
-        enum_instace_parameters = {
-            OPERANDS_TRANSLATED_NAMES_MAP.get(k, k):(
-                self.template_data_word_sized.format(
-                    variant=DATAWORD_SIZED_MAP[operands["types"][k]],
-                    constructor=self.render_extract_bitcoded(v, operands["types"][k])
-                )
-            ) for k,v in operands["masks"].items()
-        }
+        ins_param = self.eval_extraction_computation(patern, level)
 
         closure_gates=[]
 
@@ -297,7 +366,7 @@ class InstructionDecoderGenerator:
 
         return self.render_decoder_terminal(
             name=patern.name,
-            data_fields=enum_instace_parameters,
+            data_fields=ins_param,
             c_indent=level,
             closure_gates=closure_gates
         )
@@ -311,7 +380,7 @@ class InstructionDecoderGenerator:
 
         return self.render_variant_instancing(
             name=patern.name,
-            data_fields={} if self.ignore_enum_fields else enum_instace_parameters
+            data_fields={} if self.ignore_enum_fields else ins_param
         )
 
     def eval_pseudo_terminal_branch(self, data: list[str], level: int) -> str:

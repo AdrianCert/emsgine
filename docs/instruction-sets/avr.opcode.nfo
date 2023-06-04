@@ -1,13 +1,13 @@
 0001 11rd dddd rrrr $width 2 $syntax ADC Rd,Rr $name AddWithCarry
 0000 11rd dddd rrrr $width 2 $syntax ADD Rd,Rr $name Add
-1001 0110 KKdd KKKK $width 2 $syntax ADIW Rd+1:Rd,K $name AddWithImmediate
-0010 00rd dddd rrrr $width 2 $syntax AND Rd,Rr $name LogicalAnd
+1001 0110 KKdd KKKK $width 2 $syntax ADIW Rd+1:Rd,K $name AddWithImmediate $etp.d mul 2 | offset 24
+0010 00rd dddd rrrr $width 2 $syntax AND Rd,Rr $name LogicalAnd $etp.d offset 16
 0111 KKKK dddd KKKK $width 2 $syntax ANDI Rd,K $name LogicalAndWithImmediate
 1001 010d dddd 0101 $width 2 $syntax ASR Rd $name ArithmeticShiftRight
 1001 0100 1sss 1000 $width 2 $syntax BCLR s $name BitClearInSREG
 1111 100d dddd 0bbb $width 2 $syntax BLD Rd,b $name BitLoadInRegisterfromT
-1111 01kk kkkk ksss $width 2 $syntax BRBC s,k $name BranchSregBitCleared
-1111 00kk kkkk ksss $width 2 $syntax BRBS s,k $name BranchSregBitSet
+1111 01kk kkkk ksss $width 2 $syntax BRBC s,k $name BranchSregBitCleared $etp.k cast c2
+1111 00kk kkkk ksss $width 2 $syntax BRBS s,k $name BranchSregBitSet $etp.k cast c2
 ####################################################################
 # pseudo instructions for BRBS s,k
 # 1111 00kk kkkk k000 $width 2 $syntax BRCS k
@@ -80,7 +80,7 @@
 1001 010d dddd 0000 $width 2 $syntax COM Rd $name Complement
 0001 01rd dddd rrrr $width 2 $syntax CP Rd,Rr $name Compare
 0000 01rd dddd rrrr $width 2 $syntax CPC Rd,Rr $name CompareWithCarry
-0011 KKKK dddd KKKK $width 2 $syntax CPI Rd,K $name CompareWithImmediate
+0011 KKKK dddd KKKK $width 2 $syntax CPI Rd,K $name CompareWithImmediate $etp.d offset 16
 0001 00rd dddd rrrr $width 2 $syntax CPSE Rd,Rr $name CompareSkipIfEqual
 1001 010d dddd 1010 $width 2 $syntax DEC Rd $name Decrement
 1001 0100 KKKK 1011 $width 2 $syntax DES K $name DataEncryptionStandart
@@ -90,9 +90,9 @@
 1001 000d dddd 0110 $width 2 $syntax ELPM Rd, Z $name ExtendedLoadProgramMemoryZ
 1001 000d dddd 0111 $width 2 $syntax ELPM Rd, Z+ $name ExtendedLoadProgramMemoryZplus
 0010 01rd dddd rrrr $width 2 $syntax EOR Rd,Rr $name LogicalExclusiveOr
-0000 0011 0ddd 1rrr $width 2 $syntax FMUL Rd,Rr $name FractionalMultiplyUnsigned
-0000 0011 1ddd 0rrr $width 2 $syntax FMULS Rd,Rr $name FractionalMultiplySigned
-0000 0011 1ddd 1rrr $width 2 $syntax FMULSU Rd,Rr $name FractionalMultiplySignedWithUnsigned
+0000 0011 0ddd 1rrr $width 2 $syntax FMUL Rd,Rr $name FractionalMultiplyUnsigned $etp.d offset 16 $etp.r offset 16
+0000 0011 1ddd 0rrr $width 2 $syntax FMULS Rd,Rr $name FractionalMultiplySigned $etp.d offset 16 $etp.r offset 16
+0000 0011 1ddd 1rrr $width 2 $syntax FMULSU Rd,Rr $name FractionalMultiplySignedWithUnsigned $etp.d offset 16 $etp.r offset 16
 1001 0101 0000 1001 $width 2 $syntax ICALL $name IndirectCallSubroutine
 1001 0100 0000 1001 $width 2 $syntax IJMP $name IndirectJump
 1011 0AAd dddd AAAA $width 2 $syntax IN Rd,A $name LoadFromIOSpace
@@ -109,35 +109,35 @@
 1001 000d dddd 0001 $width 2 $syntax LD Rd, Z+ $name LoadIndirectFromDataSpacePostIncrementZ
 1001 000d dddd 0010 $width 2 $syntax LD Rd, -Z $name LoadIndirectFromDataSpacePreDecrementZ
 1110 KKKK dddd KKKK $width 2 $syntax LDI Rd,K $name LoadImmediate
-1001 000d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax LDS Rd,k $name LoadDirectFromDataSpace
+1001 000d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax LDS Rd,k $name LoadDirectFromDataSpace $etp.d offset 16
 1001 0101 1100 1000 $width 2 $syntax LPM $name LoadProgramMemory
 1001 000d dddd 0100 $width 2 $syntax LPM Rd, Z $name LoadProgramMemoryZ
 1001 000d dddd 0101 $width 2 $syntax LPM Rd, Z+ $name LoadProgramMemoryZplus
 1001 010d dddd 0110 $width 2 $syntax LSR Rd $name LogicalShiftRight
 0010 11rd dddd rrrr $width 2 $syntax MOV Rd,Rr $name CopyRegister
-0000 0001 dddd rrrr $width 2 $syntax MOVW Rd+1:Rd,Rr+1:Rr $name CopyRegisterWord
+0000 0001 dddd rrrr $width 2 $syntax MOVW Rd+1:Rd,Rr+1:Rr $name CopyRegisterWord $etp.d mul 2 $etp.r mul 2
 1001 11rd dddd rrrr $width 2 $syntax MUL Rd,Rr $name MultiplyUnsigned
-0000 0010 dddd rrrr $width 2 $syntax MULS Rd,Rr $name MultiplySigned
-0000 0011 0ddd 0rrr $width 2 $syntax MULSU Rd,Rr $name MultiplySignedWithUnsigned
+0000 0010 dddd rrrr $width 2 $syntax MULS Rd,Rr $name MultiplySigned $etp.d offset 16 $etp.r offset 16
+0000 0011 0ddd 0rrr $width 2 $syntax MULSU Rd,Rr $name MultiplySignedWithUnsigned $etp.d offset 16 $etp.r offset 16
 1001 010d dddd 0001 $width 2 $syntax NEG Rd $name ComplementTwo
 0000 0000 0000 0000 $width 2 $syntax NOP $name NoOperation
 0010 10rd dddd rrrr $width 2 $syntax OR Rd,Rr $name LogicalOr
-0110 KKKK dddd KKKK $width 2 $syntax ORI Rd,K $name LogicalOrWithImmediate
+0110 KKKK dddd KKKK $width 2 $syntax ORI Rd,K $name LogicalOrWithImmediate $etp.d offset 16
 1011 1AAr rrrr AAAA $width 2 $syntax OUT A,Rr $name StoreToIoSpace
 1001 000d dddd 1111 $width 2 $syntax POP Rd $name PopRegisterFromStack
-1001 001d dddd 1111 $width 2 $syntax PUSH Rr $name PushRegisterToStack
+1001 001d dddd 1111 $width 2 $syntax PUSH Rr $name PushRegisterToStack $etp.r cast c2
 1101 kkkk kkkk kkkk $width 2 $syntax RCALL k $name RelativeCallSubroutine
 1001 0101 0000 1000 $width 2 $syntax RET $name ReturnFromSubroutine
 1001 0101 0001 1000 $width 2 $syntax RETI $name ReturnFromInterrupt
-1100 kkkk kkkk kkkk $width 2 $syntax RJMP k $name RelativeJump
+1100 kkkk kkkk kkkk $width 2 $syntax RJMP k $name RelativeJump $etp.k cast c2
 1001 010d dddd 0111 $width 2 $syntax ROR Rd $name RotateRightThroughCarry
 0000 10rd dddd rrrr $width 2 $syntax SBC Rd,Rr $name SubtractWithCarry
 0100 KKKK dddd KKKK $width 2 $syntax SBCI Rd,K $name SubtractImmediateWithCarrySbi
 1001 1010 AAAA Abbb $width 2 $syntax SBI A,b $name SetBitIoSpace
 1001 1001 AAAA Abbb $width 2 $syntax SBIC A,b $name SkipIfIoBitCleared
 1001 1011 AAAA Abbb $width 2 $syntax SBIS A,b $name SkipIfIoBitSet
-1001 0111 KKdd KKKK $width 2 $syntax SBIW Rd+1:Rd,K $name SubtractImmediateWord
-1111 110r rrrr 0bbb $width 2 $syntax SBRC Rr,b $name SkipIfBitCleared
+1001 0111 KKdd KKKK $width 2 $syntax SBIW Rd+1:Rd,K $name SubtractImmediateWord $etp.d mul 2 | offset 24
+1111 110r rrrr 0bbb $width 2 $syntax SBRC Rr,b $name SkipIfBitCleared $etp.d offset 16
 1111 111r rrrr 0bbb $width 2 $syntax SBRS Rr,b $name SkipIfBitSet
 1001 0101 1000 1000 $width 2 $syntax SLEEP $name Sleep
 1001 0101 1110 1000 $width 2 $syntax SPM $ $name StoreMemoryProgram
@@ -149,9 +149,9 @@
 1001 001r rrrr 1010 $width 2 $syntax ST -Y, Rr $name StoreIndirectDataSpacePreDecrementY
 1001 001r rrrr 0001 $width 2 $syntax ST Z+, Rr $name StoreIndirectDataSpacePostIncrementZ
 1001 001r rrrr 0010 $width 2 $syntax ST -Z, Rr $name StoreIndirectDataSpacePreDecrementZ
-1001 001d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax STS k,Rr $name StoreDirectDataSpace
+1001 001d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax STS k,Rr $name StoreDirectDataSpace $etp.d offset 16
 0001 10rd dddd rrrr $width 2 $syntax SUB Rd,Rr $name SubtractWithoutCarry
-0101 KKKK dddd KKKK $width 2 $syntax SUBI Rd,K $name SubtractImmediate
+0101 KKKK dddd KKKK $width 2 $syntax SUBI Rd,K $name SubtractImmediate $etp.d offset 16
 1001 010d dddd 0010 $width 2 $syntax SWAP Rd $name SwapNibbles
 1001 0101 1010 1000 $width 2 $syntax WDR $name WatchdogReset
 1001 001r rrrr 0100 $width 2 $syntax XCH Z,Rd $name Exchange
