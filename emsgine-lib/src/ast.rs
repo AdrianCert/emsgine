@@ -1,7 +1,7 @@
 use crate::actions::ActionEvaluator;
 use crate::contexts::Context;
-use core::ops::{Add, BitAnd, BitOr, BitXor, Div, Mul, Not, Shl, Shr, Sub};
 use crate::contexts::ContextParameter;
+use core::ops::{Add, BitAnd, BitOr, BitXor, Div, Mul, Not, Shl, Shr, Sub};
 
 use crate::bitwise::{BitSel, Decrement, Increment};
 
@@ -58,23 +58,26 @@ pub struct GenericAstTree<'a, T, C> {
 }
 
 /// To be tested if work as a shorter
-trait PrimitiveOperation<T>: BitAnd<T, Output = T>
-+ BitOr<T, Output = T>
-+ BitXor<T, Output = T>
-+ Not<Output = T>
-+ Add<T, Output = T>
-+ Sub<T, Output = T>
-+ Mul<T, Output = T>
-+ Div<T, Output = T>
-+ Shl<T, Output = T>
-+ Shr<T, Output = T>
-+ BitSel<T, Output = T>
-+ Increment<T, Output = T>
-+ Decrement<T, Output = T> {}
+trait PrimitiveOperation<T>:
+    BitAnd<T, Output = T>
+    + BitOr<T, Output = T>
+    + BitXor<T, Output = T>
+    + Not<Output = T>
+    + Add<T, Output = T>
+    + Sub<T, Output = T>
+    + Mul<T, Output = T>
+    + Div<T, Output = T>
+    + Shl<T, Output = T>
+    + Shr<T, Output = T>
+    + BitSel<T, Output = T>
+    + Increment<T, Output = T>
+    + Decrement<T, Output = T>
+{
+}
 
 impl<'a, T, C> ActionEvaluator<C, T> for AstNode<'a, C, T>
 where
-    C: Context + ContextParameter<Output=T>,
+    C: Context + ContextParameter<Output = T>,
     T: Copy
         + Default
         + From<u8>
@@ -94,7 +97,7 @@ where
 {
     fn eval(&self, context: &mut C) -> T {
         match self {
-            AstNode::Immediate(value) => value.clone(),
+            AstNode::Immediate(value) => *value,
             AstNode::Parameter(value) => context.param(value).unwrap_or_default(),
             AstNode::BinaryOperation { opr, rhs, lhs } => {
                 let lhs = lhs.eval(context);
@@ -138,7 +141,7 @@ impl<'a, E, C, T> ActionEvaluator<C, T> for AstTree<'a, E, C, T>
 where
     C: Context,
     E: Interpreter<C, Output = T>,
-    T: Copy
+    T: Copy,
 {
     fn eval(&self, context: &mut C) -> T {
         self.evaluator.eval(self.node, context)
@@ -168,23 +171,23 @@ where
     T: Copy,
 {
     pub fn new(params: Vec<(&str, T)>) -> AstEvaluator<T> {
-        return AstEvaluator::<T> {
+        AstEvaluator::<T> {
             parameters: Box::new(params),
-        };
+        }
     }
 
     pub fn param(&self, value: &str) -> Option<T> {
         let items = self.parameters.as_ref();
         for (key, param) in items {
             if value.cmp(key) == core::cmp::Ordering::Equal {
-                return Some(param.clone());
+                return Some(*param);
             }
         }
         None
     }
 }
 
-impl<'evaluator, 'ast, T, C> Interpreter<C> for AstEvaluator<'evaluator, T>
+impl<'evaluator, T, C> Interpreter<C> for AstEvaluator<'evaluator, T>
 where
     C: Context,
     T: Copy
@@ -208,7 +211,7 @@ where
 
     fn eval(&self, node: &AstNode<C, Self::Output>, context: &mut C) -> Self::Output {
         match node {
-            AstNode::Immediate(value) => value.clone(),
+            AstNode::Immediate(value) => *value,
             AstNode::Parameter(value) => self.param(value).unwrap_or_default(),
             AstNode::BinaryOperation { opr, rhs, lhs } => {
                 let lhs = self.eval(lhs, context);

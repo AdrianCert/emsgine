@@ -113,19 +113,19 @@ from_data_word_sized_impl! {u8 u16 u32 u64 i8 i16 i32 i64}
 
 impl DataWordSized {
     pub fn as_u8(&self) -> u8 {
-        self.clone().into()
+        (*self).into()
     }
 
     pub fn as_u16(&self) -> u16 {
-        self.clone().into()
+        (*self).into()
     }
 
     pub fn as_u32(&self) -> u32 {
-        self.clone().into()
+        (*self).into()
     }
 
     pub fn as_u64(&self) -> u64 {
-        self.clone().into()
+        (*self).into()
     }
 }
 

@@ -12,5 +12,8 @@ pub trait PointerContext {
     type Context: Context;
     type Output;
 
-    fn resolve(&self, context: &Self::Context) -> (usize, Rc<dyn MemoryContext<Output = Self::Output>>);
+    fn resolve(
+        &self,
+        context: &Self::Context,
+    ) -> (usize, Rc<dyn MemoryContext<Output = Self::Output>>);
 }

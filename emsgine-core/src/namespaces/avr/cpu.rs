@@ -1,12 +1,12 @@
-use emsgine_lib::models::bytes::EndianByteOrdering;
-use emsgine_lib::contexts::Context;
+use crate::contexts::CpuContext;
 use crate::contexts::MemoryContext;
 use crate::contexts::PointerContext;
 use crate::memory::MemoryDevice;
-use crate::contexts::CpuContext;
+use emsgine_lib::contexts::Context;
 use emsgine_lib::models::bytes::DataWordSized;
-use std::rc::Rc;
+use emsgine_lib::models::bytes::EndianByteOrdering;
 use std::collections::BTreeMap;
+use std::rc::Rc;
 
 pub static ENDIANNESS: EndianByteOrdering = EndianByteOrdering::LittleEndian;
 
@@ -15,29 +15,26 @@ pub struct MemoryMap {
     pub reg_page: usize,
     pub io_space: usize,
     pub data_space: usize,
-    pub overflow: usize
+    pub overflow: usize,
 }
 
 #[derive(Debug)]
 pub struct SymbolTable {
-    vtbl: BTreeMap<&'static str, (AddressPointer, u8)>
+    vtbl: BTreeMap<&'static str, (AddressPointer, u8)>,
 }
 
 impl SymbolTable {
-
     pub fn create(value: Vec<(&'static str, (AddressPointer, u8))>) -> SymbolTable {
         let mut vtbl = BTreeMap::new();
         vtbl.extend(value);
-        SymbolTable {
-            vtbl
-        }
+        SymbolTable { vtbl }
     }
 
     pub fn get(&self, key: &str, context: &CentralProcessUnit) -> DataWordSized {
         if let Some(syb) = self.vtbl.get(key) {
             let (ptr, size) = syb;
             let (radr, mem) = ptr.resolve(context);
-            let bytes = mem.read_bytes(radr, usize::from(size.clone()));
+            let bytes = mem.read_bytes(radr, usize::from(*size));
             return ENDIANNESS.compose(bytes);
         }
         DataWordSized::Invalid
@@ -56,12 +53,11 @@ impl SymbolTable {
 #[derive(Debug)]
 pub enum AddressPointer {
     RegisterPage(usize), // first 32 registers value
-    IoSpace(usize), // io ports map here
-    DataSpace(usize), // rest of data here
-    MemorySpace(usize), // used to absolute maps
+    IoSpace(usize),      // io ports map here
+    DataSpace(usize),    // rest of data here
+    MemorySpace(usize),  // used to absolute maps
     ProgramSpace(usize), // used to store program
 }
-
 
 #[derive(Debug)]
 pub struct CentralProcessUnit {
@@ -87,7 +83,7 @@ impl AddressPointer {
         self.read_bytes(context, 1)[0]
     }
 
-    fn write(&self, context: &CentralProcessUnit, value: u8){
+    fn write(&self, context: &CentralProcessUnit, value: u8) {
         self.write_bytes(context, vec![value])
     }
 }
@@ -105,15 +101,12 @@ impl PointerContext for AddressPointer {
                 (context.mmap.reg_page + val, context.mram.clone())
             }
             AddressPointer::IoSpace(val) => (context.mmap.io_space + val, context.mram.clone()),
-            AddressPointer::DataSpace(val) => {
-                (context.mmap.data_space + val, context.mram.clone())
-            }
-            AddressPointer::MemorySpace(val) => (val.clone(), context.mram.clone()),
-            AddressPointer::ProgramSpace(val) => (val.clone(), context.mprg.clone()),
+            AddressPointer::DataSpace(val) => (context.mmap.data_space + val, context.mram.clone()),
+            AddressPointer::MemorySpace(val) => (*val, context.mram.clone()),
+            AddressPointer::ProgramSpace(val) => (*val, context.mprg.clone()),
         }
     }
 }
-
 
 impl Context for CentralProcessUnit {}
 impl CpuContext for CentralProcessUnit {
@@ -155,5 +148,4 @@ impl CpuContext for CentralProcessUnit {
         let nval = update(cval);
         self.stbl.set(key, self, nval);
     }
-
 }

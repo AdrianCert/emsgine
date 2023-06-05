@@ -23,8 +23,7 @@
 //     build
 // }
 
-// pub fn adc(rd: u8, rs: u8) -> 
-
+// pub fn adc(rd: u8, rs: u8) ->
 
 // pub fn build_add(rd: u8, rs: u8) -> CpuInstruction {
 //     return CpuInstruction {

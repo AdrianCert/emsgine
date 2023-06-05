@@ -6,13 +6,13 @@ pub use emsgine_lib::models::instructionset::InstructionNamespace;
 use crate::contexts::CpuContext;
 
 pub mod instruction;
-pub mod registers;
 
 pub struct InstructionPull {
     pub wordsize: u8,
     pub endianness: EndianByteOrdering,
 }
 
+pub mod cpu;
 
 /// ChainOperation left to right lazy operations.
 ///
@@ -21,7 +21,7 @@ pub struct InstructionPull {
 /// If it's no next operation then it's used the last one.
 pub struct ChainOperation<C, T>
 where
-    C: Context
+    C: Context,
 {
     pub operands: Vec<Box<dyn ActionEvaluator<C, T>>>,
     pub operations: Vec<fn(T, T) -> T>,
@@ -32,10 +32,9 @@ use std::iter::repeat;
 impl<C, T> ActionEvaluator<C, T> for ChainOperation<C, T>
 where
     C: CpuContext,
-    T: Copy
+    T: Copy,
 {
     fn eval(&self, context: &mut C) -> T {
-
         if self.operands.len() == 1 {
             return self.operands[0].eval(context);
         }
@@ -56,33 +55,30 @@ where
 }
 
 pub struct LogicalAnd<C, T> {
-    pub operands: Vec<Box<dyn ActionEvaluator<C, T>>>
+    pub operands: Vec<Box<dyn ActionEvaluator<C, T>>>,
 }
 
 pub struct LogicalOr<C, T> {
-    pub operands: Vec<Box<dyn ActionEvaluator<C, T>>>
+    pub operands: Vec<Box<dyn ActionEvaluator<C, T>>>,
 }
 
 pub struct LogicalNegation<C, T> {
-    pub value: Box<dyn ActionEvaluator<C, T>>
+    pub value: Box<dyn ActionEvaluator<C, T>>,
 }
 
 impl<C, T> LogicalNegation<C, T> {
     pub fn new(value: Box<dyn ActionEvaluator<C, T>>) -> LogicalNegation<C, T> {
-        LogicalNegation {
-            value
-        }
+        LogicalNegation { value }
     }
 }
 
 pub struct UnaryOperation<C, T>
 where
-    C: Context
- {
+    C: Context,
+{
     pub operand: Box<dyn ActionEvaluator<C, T>>,
     pub operation: fn(T) -> T,
 }
-
 
 // #[cfg(test)]
 // mod tests {
@@ -127,15 +123,12 @@ where
 //     }
 // }
 
-
-
-
 impl<T, C> ActionEvaluator<C, T> for UnaryOperation<C, T>
 where
     C: Context,
 {
     fn eval(&self, context: &mut C) -> T {
-        return (self.operation)(self.operand.eval(context));
+        (self.operation)(self.operand.eval(context))
     }
 }
 

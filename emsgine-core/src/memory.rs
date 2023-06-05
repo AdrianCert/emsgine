@@ -61,13 +61,13 @@ impl Register {
             value: Cell::new(0x00),
         };
     }
-    
+
     pub fn from(value: Option<u8>) -> Register {
         return Register {
             value: Cell::new(value.unwrap_or(0x00)),
         };
     }
-    
+
     pub fn clr(&self, bit: u8) {
         self.value.set(clr_bit!(self.value.get(), bit));
     }
@@ -75,7 +75,7 @@ impl Register {
     pub fn set(&self, bit: u8) {
         self.value.set(set_bit!(self.value.get(), bit));
     }
-    
+
     pub fn tgl(&self, bit: u8) {
         self.value.set(tgl_bit!(self.value.get(), bit));
     }
@@ -88,7 +88,7 @@ impl MemoryReadCapability for Register {
         // }
         return vec![self.value.get()];
     }
-    
+
     fn read_byte(&self, addr: usize) -> Result<u8, OverflowMemoryError> {
         if addr == 0 {
             return Err(OverflowMemoryError {});
@@ -120,7 +120,7 @@ impl<T> MemoryReadCapability for MemoryDevice<T> {
         }
         return Ok(self.data.borrow()[addr]);
     }
-    
+
     fn overflow_addr(&self) -> usize {
         return self.capacity;
     }
@@ -161,13 +161,13 @@ impl VirtualMemoryDevice {
                 };
             })
             .collect();
-        
+
         return VirtualMemoryDevice {
             data_map,
             capacity: offset,
         };
     }
-    
+
     fn dispatch_addr(
         &self,
         addr: usize,
@@ -232,23 +232,25 @@ use crate::contexts::MemoryContext;
 
 pub struct RegistersPage<T>
 where
-T: Copy
+    T: Copy,
 {
     pub registers: RefCell<Vec<T>>,
 }
 
 impl<T> RegistersPage<T>
-where T: Copy {
+where
+    T: Copy,
+{
     pub fn new(space: usize, default: T) -> RegistersPage<T> {
         RegistersPage::<T> {
-            registers: RefCell::new(vec![default; space])
+            registers: RefCell::new(vec![default; space]),
         }
     }
 
     pub fn read(&self, addr: usize) -> T {
-        self.registers.borrow()[addr].clone()
+        self.registers.borrow()[addr]
     }
-    
+
     pub fn write(&self, addr: usize, value: T) {
         self.registers.borrow_mut()[addr] = value;
     }
@@ -256,7 +258,10 @@ where T: Copy {
 
 impl<T> Context for RegistersPage<T> where T: Copy {}
 
-impl<T> MemoryContext for RegistersPage<T> where T: Copy {
+impl<T> MemoryContext for RegistersPage<T>
+where
+    T: Copy,
+{
     type Output = T;
 
     fn read_bytes(&self, addr: usize, count: usize) -> Vec<Self::Output> {
@@ -266,18 +271,17 @@ impl<T> MemoryContext for RegistersPage<T> where T: Copy {
     fn write_bytes(&self, addr: usize, bites: Vec<Self::Output>) {
         let mut mem = self.registers.borrow_mut();
         let len = mem.len();
-        let mut bites_iter = bites.iter();
+        // let mut bites_iter: std::slice::Iter<T> = bites.iter();
         let mut ptr = addr;
 
-        while let Some(byte) = bites_iter.next() {
+        for byte in bites {
             if ptr < len {
-                mem[ptr] = *byte;
+                mem[ptr] = byte;
             }
             ptr += 1;
         }
     }
 }
-
 
 #[derive(Debug)]
 pub struct MemoryDevice<T> {
@@ -286,26 +290,30 @@ pub struct MemoryDevice<T> {
 }
 
 impl<T> MemoryDevice<T>
-where T: Default + Copy
+where
+    T: Default + Copy,
 {
     pub fn new(size: usize) -> MemoryDevice<T> {
-        return MemoryDevice {
+        MemoryDevice {
             capacity: size,
             data: RefCell::new(vec![T::default(); size]),
-        };
+        }
     }
 
     pub fn from(data: Vec<T>) -> MemoryDevice<T> {
-        return MemoryDevice {
+        MemoryDevice {
             capacity: data.len(),
             data: RefCell::new(data),
-        };
+        }
     }
 }
 
 impl<T> Context for MemoryDevice<T> where T: Copy {}
 
-impl<T> MemoryContext for MemoryDevice<T> where T: Copy {
+impl<T> MemoryContext for MemoryDevice<T>
+where
+    T: Copy,
+{
     type Output = T;
 
     fn read_bytes(&self, addr: usize, count: usize) -> Vec<Self::Output> {
@@ -315,12 +323,12 @@ impl<T> MemoryContext for MemoryDevice<T> where T: Copy {
     fn write_bytes(&self, addr: usize, bites: Vec<Self::Output>) {
         let mut mem = self.data.borrow_mut();
         let len = mem.len();
-        let mut bites_iter = bites.iter();
+        // let mut bites_iter = bites.iter();
         let mut ptr = addr;
 
-        while let Some(byte) = bites_iter.next() {
+        for byte in bites {
             if ptr < len {
-                mem[ptr] = *byte;
+                mem[ptr] = byte;
             }
             ptr += 1;
         }
@@ -339,7 +347,6 @@ mod tests {
 
         assert_eq!(rp.read(12), 0);
         rp.write(12, 0xf2);
-
 
         assert_eq!(rp.read_bytes(10, 2), vec![0u8; 2]);
         rp.write_bytes(10, vec![5, 7]);

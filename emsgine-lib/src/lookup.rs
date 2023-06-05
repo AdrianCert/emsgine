@@ -7,13 +7,13 @@ macro_rules! safe_lookup {
     };
 }
 
-pub trait Lookup<K,V> {
+pub trait Lookup<K, V> {
     fn lookup(&self, key: K) -> Option<&V>;
 }
 
-impl<K,V> Lookup<K,V> for std::collections::HashMap<K,V>
+impl<K, V> Lookup<K, V> for std::collections::HashMap<K, V>
 where
-    K: std::cmp::Eq + core::hash::Hash
+    K: std::cmp::Eq + core::hash::Hash,
 {
     fn lookup(&self, key: K) -> Option<&V> {
         self.get(&key)

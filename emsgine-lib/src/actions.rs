@@ -2,7 +2,6 @@ use std::rc::Rc;
 
 use crate::contexts::Context;
 
-
 pub trait Action<C>
 where
     C: Context,
@@ -19,7 +18,7 @@ where
 
 pub trait ActionEvaluator<C, T>
 where
-    C: Context
+    C: Context,
 {
     fn eval(&self, context: &mut C) -> T;
 }

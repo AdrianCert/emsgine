@@ -1,7 +1,6 @@
-use emsgine_lib::models::bytes::DataWordSized;
-use emsgine_lib::contexts::Context;
 use crate::contexts::memory::PointerContext;
-
+use emsgine_lib::contexts::Context;
+use emsgine_lib::models::bytes::DataWordSized;
 
 pub trait CpuContext: Context {
     type Register;

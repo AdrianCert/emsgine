@@ -1,10 +1,12 @@
 use super::instructions::{{enum_name}};
 use {{dataword_impt}}::{{dataword_enum}};
 
+type InstructionParameters<'a> = Vec<(&'a str, {{dataword_enum}})>;
+
 {% if extract_macro -%}
     {{extract_macro}}
 {% endif %}
 
-pub fn {{function_name}}<'a>({{variable}}: Vec<u16>) -> Result<({{enum_name}}, Vec<(&'a str, {{dataword_enum}})>), u8> {
-    return {{matcher}};
+pub fn {{function_name}}<'a>({{variable}}: Vec<u16>) -> Result<({{enum_name}}, InstructionParameters<'a>), u8> {
+    {{matcher}}
 }

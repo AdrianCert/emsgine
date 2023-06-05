@@ -27,11 +27,11 @@ macro_rules! get_bit {
 }
 
 pub fn word_split(value: u16) -> (u8, u8) {
-    return ((value >> 8) as u8, value as u8);
+    ((value >> 8) as u8, value as u8)
 }
 
 pub fn dword_split(value: u32) -> (u16, u16) {
-    return ((value >> 16) as u16, value as u16);
+    ((value >> 16) as u16, value as u16)
 }
 
 pub trait BitSel<Rhs = Self> {
@@ -89,13 +89,13 @@ macro_rules! decrement_impl {
 decrement_impl! {usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128}
 
 pub use clr_bit;
+pub use get_bit;
 pub use set_bit;
 pub use tgl_bit;
-pub use get_bit;
 
 #[cfg(test)]
 mod tests {
-    use super::{clr_bit, set_bit, get_bit, tgl_bit};
+    use super::{clr_bit, get_bit, set_bit, tgl_bit};
 
     #[test]
     fn bitwise_operation_correctness() {

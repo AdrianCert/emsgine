@@ -8,7 +8,7 @@ impl FormatInstruction for {{enum_name}} {
         }
     }
 
-    fn format<'a>(&self, ltbl: &'a dyn Lookup<&str, DataWordSized>) -> String {
+    fn format(&self, ltbl: &dyn Lookup<&str, DataWordSized>) -> String {
         match self {
         {% for enum_variant, formatstr in enum_variants %}
             {{enum_name}}::{{enum_variant}} =>
@@ -22,10 +22,10 @@ impl FormatInstruction for {{enum_name}} {
                         {%- endfor -%}
                         ),
                 {% else -%}
-                    format!("{{formatstr[0]}}"),
+                    "{{formatstr[0]}}".to_string(),
                 {% endif -%}
         {% endfor %}
-            {{enum_name}}::Invalid => format!("???")
+            {{enum_name}}::Invalid => "???".to_string()
         }
     }
 }

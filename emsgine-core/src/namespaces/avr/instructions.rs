@@ -1,113 +1,113 @@
-// generated-code: 2023-06-04T23:12:57.029690
+// generated-code: 2023-06-05T12:50:50.415889
 
+use emsgine_lib::lookup::safe_lookup;
+use emsgine_lib::lookup::Lookup;
+use emsgine_lib::models::bytes::DataWordSized;
+use emsgine_lib::models::instructionset::FormatInstruction;
 use emsgine_lib::models::instructionset::InstructionNamespace;
 use emsgine_lib::models::instructionset::MnemonicInstruction;
-use emsgine_lib::models::instructionset::FormatInstruction;
-use emsgine_lib::models::bytes::DataWordSized;
-use emsgine_lib::lookup::Lookup;
-use emsgine_lib::lookup::safe_lookup;
 
 #[derive(Debug)]
 pub enum AvrInstructionSet {
-    AddWithCarry, //ADC Rd,Rr
-    Compare, //CP Rd,Rr
-    CompareSkipIfEqual, //CPSE Rd,Rr
-    SubtractWithoutCarry, //SUB Rd,Rr
-    Add, //ADD Rd,Rr
-    CompareWithCarry, //CPC Rd,Rr
-    FractionalMultiplyUnsigned, //FMUL Rd,Rr
-    MultiplySignedWithUnsigned, //MULSU Rd,Rr
-    FractionalMultiplySigned, //FMULS Rd,Rr
-    FractionalMultiplySignedWithUnsigned, //FMULSU Rd,Rr
-    CopyRegisterWord, //MOVW Rd+1:Rd,Rr+1:Rr
-    MultiplySigned, //MULS Rd,Rr
-    NoOperation, //NOP
-    SubtractWithCarry, //SBC Rd,Rr
-    AddWithImmediate, //ADIW Rd+1:Rd,K
-    SubtractImmediateWord, //SBIW Rd+1:Rd,K
-    ArithmeticShiftRight, //ASR Rd
-    BitClearInSREG, //BCLR s
-    Break, //BREAK
-    ExtendedLoadProgramMemory, //ELPM
-    LoadProgramMemory, //LPM
-    Sleep, //SLEEP
-    StoreMemoryProgram, //SPM
-    StoreMemoryProgramPostIncrementZ, //SPM Z+
-    WatchdogReset, //WDR
-    BitSet, //BSET s
-    ExtendedIndirectJump, //EIJMP
-    IndirectJump, //IJMP
-    ExtendedIndirectCallSubroutine, //EICALL
-    ReturnFromInterrupt, //RETI
-    IndirectCallSubroutine, //ICALL
-    ReturnFromSubroutine, //RET
-    Call, //CALL k
-    Complement, //COM Rd
-    ComplementTwo, //NEG Rd
-    Decrement, //DEC Rd
-    DataEncryptionStandart, //DES K
-    Increment, //INC Rd
-    SwapNibbles, //SWAP Rd
-    Jump, //JMP k
-    LogicalShiftRight, //LSR Rd
-    RotateRightThroughCarry, //ROR Rd
-    ClearIOBit, //CBI A,b
-    SetBitIoSpace, //SBI A,b
-    SkipIfIoBitCleared, //SBIC A,b
-    SkipIfIoBitSet, //SBIS A,b
-    ExtendedLoadProgramMemoryZ, //ELPM Rd, Z
-    ExtendedLoadProgramMemoryZplus, //ELPM Rd, Z+
-    LoadIndirectFromDataSpaceIndexX, //LD Rd, X
+    AddWithCarry,                            //ADC Rd,Rr
+    Compare,                                 //CP Rd,Rr
+    CompareSkipIfEqual,                      //CPSE Rd,Rr
+    SubtractWithoutCarry,                    //SUB Rd,Rr
+    Add,                                     //ADD Rd,Rr
+    CompareWithCarry,                        //CPC Rd,Rr
+    FractionalMultiplyUnsigned,              //FMUL Rd,Rr
+    MultiplySignedWithUnsigned,              //MULSU Rd,Rr
+    FractionalMultiplySigned,                //FMULS Rd,Rr
+    FractionalMultiplySignedWithUnsigned,    //FMULSU Rd,Rr
+    CopyRegisterWord,                        //MOVW Rd+1:Rd,Rr+1:Rr
+    MultiplySigned,                          //MULS Rd,Rr
+    NoOperation,                             //NOP
+    SubtractWithCarry,                       //SBC Rd,Rr
+    AddWithImmediate,                        //ADIW Rd+1:Rd,K
+    SubtractImmediateWord,                   //SBIW Rd+1:Rd,K
+    ArithmeticShiftRight,                    //ASR Rd
+    BitClearInSREG,                          //BCLR s
+    Break,                                   //BREAK
+    ExtendedLoadProgramMemory,               //ELPM
+    LoadProgramMemory,                       //LPM
+    Sleep,                                   //SLEEP
+    StoreMemoryProgram,                      //SPM
+    StoreMemoryProgramPostIncrementZ,        //SPM Z+
+    WatchdogReset,                           //WDR
+    BitSet,                                  //BSET s
+    ExtendedIndirectJump,                    //EIJMP
+    IndirectJump,                            //IJMP
+    ExtendedIndirectCallSubroutine,          //EICALL
+    ReturnFromInterrupt,                     //RETI
+    IndirectCallSubroutine,                  //ICALL
+    ReturnFromSubroutine,                    //RET
+    Call,                                    //CALL k
+    Complement,                              //COM Rd
+    ComplementTwo,                           //NEG Rd
+    Decrement,                               //DEC Rd
+    DataEncryptionStandart,                  //DES K
+    Increment,                               //INC Rd
+    SwapNibbles,                             //SWAP Rd
+    Jump,                                    //JMP k
+    LogicalShiftRight,                       //LSR Rd
+    RotateRightThroughCarry,                 //ROR Rd
+    ClearIOBit,                              //CBI A,b
+    SetBitIoSpace,                           //SBI A,b
+    SkipIfIoBitCleared,                      //SBIC A,b
+    SkipIfIoBitSet,                          //SBIS A,b
+    ExtendedLoadProgramMemoryZ,              //ELPM Rd, Z
+    ExtendedLoadProgramMemoryZplus,          //ELPM Rd, Z+
+    LoadIndirectFromDataSpaceIndexX,         //LD Rd, X
     LoadIndirectFromDataSpacePostIncrementX, //LD Rd, X+
-    LoadIndirectFromDataSpacePreDecrementX, //LD Rd, -X
+    LoadIndirectFromDataSpacePreDecrementX,  //LD Rd, -X
     LoadIndirectFromDataSpacePostIncrementY, //LD Rd, Y+
-    LoadIndirectFromDataSpacePreDecrementY, //LD Rd, -Y
+    LoadIndirectFromDataSpacePreDecrementY,  //LD Rd, -Y
     LoadIndirectFromDataSpacePostIncrementZ, //LD Rd, Z+
-    LoadIndirectFromDataSpacePreDecrementZ, //LD Rd, -Z
-    LoadDirectFromDataSpace, //LDS Rd,k
-    LoadProgramMemoryZ, //LPM Rd, Z
-    LoadProgramMemoryZplus, //LPM Rd, Z+
-    PopRegisterFromStack, //POP Rd
-    LoadAndClear, //LAC Z,Rd
-    LoadAndSet, //LAS Z,Rd
-    LoadAndToggle, //LAT Z,Rd
-    PushRegisterToStack, //PUSH Rd
-    StoreIndirectDataSpaceIndexX, //ST X, Rr
-    StoreIndirectDataSpacePostIncrementX, //ST X+, Rr
-    StoreIndirectDataSpacePreDecrementX, //ST -X, Rr
-    StoreIndirectDataSpacePostIncrementY, //ST Y+, Rr
-    StoreIndirectDataSpacePreDecrementY, //ST -Y, Rr
-    StoreIndirectDataSpacePostIncrementZ, //ST Z+, Rr
-    StoreIndirectDataSpacePreDecrementZ, //ST -Z, Rr
-    StoreDirectDataSpace, //STS k,Rr
-    Exchange, //XCH Z,Rd
-    MultiplyUnsigned, //MUL Rd,Rr
-    LogicalAnd, //AND Rd,Rr
-    LogicalExclusiveOr, //EOR Rd,Rr
-    CopyRegister, //MOV Rd,Rr
-    LogicalOr, //OR Rd,Rr
-    LogicalAndWithImmediate, //ANDI Rd,K
-    BitLoadInRegisterfromT, //BLD Rd,b
-    BitStorefromRegister, //BST Rd,b
-    BranchSregBitCleared, //BRBC s,k
-    BranchSregBitSet, //BRBS s,k
-    SkipIfBitCleared, //SBRC Rr,b
-    SkipIfBitSet, //SBRS Rr,b
-    CompareWithImmediate, //CPI Rd,K
-    LoadFromIOSpace, //IN Rd,A
-    StoreToIoSpace, //OUT A,Rr
-    LoadImmediate, //LDI Rd,K
-    LogicalOrWithImmediate, //ORI Rd,K
-    RelativeCallSubroutine, //RCALL k
-    RelativeJump, //RJMP k
-    SubtractImmediateWithCarrySbi, //SBCI Rd,K
-    SubtractImmediate, //SUBI Rd,K
-    LoadIndirectWithDisplacementY, //LDD Rd, Y+q
-    StoreIndirectWithDisplacementY, //STD Y+q, Rr
-    LoadIndirectWithDisplacementZ, //LDD Rd, Z+q
-    StoreIndirectWithDisplacementZ, //STD Z+q, Rr
-    LoadStoreIndirectWithHightDisplacement, //STD Y+q, Rr
-    Invalid
+    LoadIndirectFromDataSpacePreDecrementZ,  //LD Rd, -Z
+    LoadDirectFromDataSpace,                 //LDS Rd,k
+    LoadProgramMemoryZ,                      //LPM Rd, Z
+    LoadProgramMemoryZplus,                  //LPM Rd, Z+
+    PopRegisterFromStack,                    //POP Rd
+    LoadAndClear,                            //LAC Z,Rd
+    LoadAndSet,                              //LAS Z,Rd
+    LoadAndToggle,                           //LAT Z,Rd
+    PushRegisterToStack,                     //PUSH Rd
+    StoreIndirectDataSpaceIndexX,            //ST X, Rr
+    StoreIndirectDataSpacePostIncrementX,    //ST X+, Rr
+    StoreIndirectDataSpacePreDecrementX,     //ST -X, Rr
+    StoreIndirectDataSpacePostIncrementY,    //ST Y+, Rr
+    StoreIndirectDataSpacePreDecrementY,     //ST -Y, Rr
+    StoreIndirectDataSpacePostIncrementZ,    //ST Z+, Rr
+    StoreIndirectDataSpacePreDecrementZ,     //ST -Z, Rr
+    StoreDirectDataSpace,                    //STS k,Rr
+    Exchange,                                //XCH Z,Rd
+    MultiplyUnsigned,                        //MUL Rd,Rr
+    LogicalAnd,                              //AND Rd,Rr
+    LogicalExclusiveOr,                      //EOR Rd,Rr
+    CopyRegister,                            //MOV Rd,Rr
+    LogicalOr,                               //OR Rd,Rr
+    LogicalAndWithImmediate,                 //ANDI Rd,K
+    BitLoadInRegisterfromT,                  //BLD Rd,b
+    BitStorefromRegister,                    //BST Rd,b
+    BranchSregBitCleared,                    //BRBC s,k
+    BranchSregBitSet,                        //BRBS s,k
+    SkipIfBitCleared,                        //SBRC Rr,b
+    SkipIfBitSet,                            //SBRS Rr,b
+    CompareWithImmediate,                    //CPI Rd,K
+    LoadFromIOSpace,                         //IN Rd,A
+    StoreToIoSpace,                          //OUT A,Rr
+    LoadImmediate,                           //LDI Rd,K
+    LogicalOrWithImmediate,                  //ORI Rd,K
+    RelativeCallSubroutine,                  //RCALL k
+    RelativeJump,                            //RJMP k
+    SubtractImmediateWithCarrySbi,           //SBCI Rd,K
+    SubtractImmediate,                       //SUBI Rd,K
+    LoadIndirectWithDisplacementY,           //LDD Rd, Y+q
+    StoreIndirectWithDisplacementY,          //STD Y+q, Rr
+    LoadIndirectWithDisplacementZ,           //LDD Rd, Z+q
+    StoreIndirectWithDisplacementZ,          //STD Z+q, Rr
+    LoadStoreIndirectWithHightDisplacement,  //STD Y+q, Rr
+    Invalid,
 }
 
 impl InstructionNamespace for AvrInstructionSet {}
@@ -213,7 +213,7 @@ impl MnemonicInstruction for AvrInstructionSet {
             AvrInstructionSet::LoadIndirectWithDisplacementZ => "LDD",
             AvrInstructionSet::StoreIndirectWithDisplacementZ => "STD",
             AvrInstructionSet::LoadStoreIndirectWithHightDisplacement => "STD",
-            AvrInstructionSet::Invalid => "???"
+            AvrInstructionSet::Invalid => "???",
         }
     }
 }
@@ -319,111 +319,341 @@ impl FormatInstruction for AvrInstructionSet {
             AvrInstructionSet::LoadIndirectWithDisplacementZ => "LDD R{}, Z+{}",
             AvrInstructionSet::StoreIndirectWithDisplacementZ => "STD Z+{}, R{}",
             AvrInstructionSet::LoadStoreIndirectWithHightDisplacement => "STD Y+{}, R{}",
-            AvrInstructionSet::Invalid => "???"
+            AvrInstructionSet::Invalid => "???",
         }
     }
 
-    fn format<'a>(&self, ltbl: &'a dyn Lookup<&str, DataWordSized>) -> String {
+    fn format(&self, ltbl: &dyn Lookup<&str, DataWordSized>) -> String {
         match self {
-            AvrInstructionSet::AddWithCarry => format!("ADC R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::Compare => format!("CP R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::CompareSkipIfEqual => format!("CPSE R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::SubtractWithoutCarry => format!("SUB R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::Add => format!("ADD R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::CompareWithCarry => format!("CPC R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::FractionalMultiplyUnsigned => format!("FMUL R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::MultiplySignedWithUnsigned => format!("MULSU R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::FractionalMultiplySigned => format!("FMULS R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::FractionalMultiplySignedWithUnsigned => format!("FMULSU R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::CopyRegisterWord => format!("MOVW R{}+1:R{},R{}+1:R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::MultiplySigned => format!("MULS R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::NoOperation =>format!("NOP"),
-            AvrInstructionSet::SubtractWithCarry => format!("SBC R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::AddWithImmediate => format!("ADIW R{}+1:R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::SubtractImmediateWord => format!("SBIW R{}+1:R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::ArithmeticShiftRight => format!("ASR R{}", safe_lookup![ltbl, "rds"]),
+            AvrInstructionSet::AddWithCarry => format!(
+                "ADC R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::Compare => format!(
+                "CP R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::CompareSkipIfEqual => format!(
+                "CPSE R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::SubtractWithoutCarry => format!(
+                "SUB R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::Add => format!(
+                "ADD R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::CompareWithCarry => format!(
+                "CPC R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::FractionalMultiplyUnsigned => format!(
+                "FMUL R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::MultiplySignedWithUnsigned => format!(
+                "MULSU R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::FractionalMultiplySigned => format!(
+                "FMULS R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::FractionalMultiplySignedWithUnsigned => format!(
+                "FMULSU R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::CopyRegisterWord => format!(
+                "MOVW R{}+1:R{},R{}+1:R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::MultiplySigned => format!(
+                "MULS R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::NoOperation => "NOP".to_string(),
+            AvrInstructionSet::SubtractWithCarry => format!(
+                "SBC R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::AddWithImmediate => format!(
+                "ADIW R{}+1:R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::SubtractImmediateWord => format!(
+                "SBIW R{}+1:R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::ArithmeticShiftRight => {
+                format!("ASR R{}", safe_lookup![ltbl, "rds"])
+            }
             AvrInstructionSet::BitClearInSREG => format!("BCLR {}", safe_lookup![ltbl, "s"]),
-            AvrInstructionSet::Break =>format!("BREAK"),
-            AvrInstructionSet::ExtendedLoadProgramMemory =>format!("ELPM"),
-            AvrInstructionSet::LoadProgramMemory =>format!("LPM"),
-            AvrInstructionSet::Sleep =>format!("SLEEP"),
-            AvrInstructionSet::StoreMemoryProgram =>format!("SPM"),
-            AvrInstructionSet::StoreMemoryProgramPostIncrementZ =>format!("SPM Z+"),
-            AvrInstructionSet::WatchdogReset =>format!("WDR"),
+            AvrInstructionSet::Break => "BREAK".to_string(),
+            AvrInstructionSet::ExtendedLoadProgramMemory => "ELPM".to_string(),
+            AvrInstructionSet::LoadProgramMemory => "LPM".to_string(),
+            AvrInstructionSet::Sleep => "SLEEP".to_string(),
+            AvrInstructionSet::StoreMemoryProgram => "SPM".to_string(),
+            AvrInstructionSet::StoreMemoryProgramPostIncrementZ => "SPM Z+".to_string(),
+            AvrInstructionSet::WatchdogReset => "WDR".to_string(),
             AvrInstructionSet::BitSet => format!("BSET {}", safe_lookup![ltbl, "s"]),
-            AvrInstructionSet::ExtendedIndirectJump =>format!("EIJMP"),
-            AvrInstructionSet::IndirectJump =>format!("IJMP"),
-            AvrInstructionSet::ExtendedIndirectCallSubroutine =>format!("EICALL"),
-            AvrInstructionSet::ReturnFromInterrupt =>format!("RETI"),
-            AvrInstructionSet::IndirectCallSubroutine =>format!("ICALL"),
-            AvrInstructionSet::ReturnFromSubroutine =>format!("RET"),
+            AvrInstructionSet::ExtendedIndirectJump => "EIJMP".to_string(),
+            AvrInstructionSet::IndirectJump => "IJMP".to_string(),
+            AvrInstructionSet::ExtendedIndirectCallSubroutine => "EICALL".to_string(),
+            AvrInstructionSet::ReturnFromInterrupt => "RETI".to_string(),
+            AvrInstructionSet::IndirectCallSubroutine => "ICALL".to_string(),
+            AvrInstructionSet::ReturnFromSubroutine => "RET".to_string(),
             AvrInstructionSet::Call => format!("CALL {}", safe_lookup![ltbl, "k"]),
             AvrInstructionSet::Complement => format!("COM R{}", safe_lookup![ltbl, "rds"]),
             AvrInstructionSet::ComplementTwo => format!("NEG R{}", safe_lookup![ltbl, "rds"]),
             AvrInstructionSet::Decrement => format!("DEC R{}", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::DataEncryptionStandart => format!("DES {}", safe_lookup![ltbl, "imd"]),
+            AvrInstructionSet::DataEncryptionStandart => {
+                format!("DES {}", safe_lookup![ltbl, "imd"])
+            }
             AvrInstructionSet::Increment => format!("INC R{}", safe_lookup![ltbl, "rds"]),
             AvrInstructionSet::SwapNibbles => format!("SWAP R{}", safe_lookup![ltbl, "rds"]),
             AvrInstructionSet::Jump => format!("JMP {}", safe_lookup![ltbl, "k"]),
             AvrInstructionSet::LogicalShiftRight => format!("LSR R{}", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::RotateRightThroughCarry => format!("ROR R{}", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::ClearIOBit => format!("CBI {},{}", safe_lookup![ltbl, "rio"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::SetBitIoSpace => format!("SBI {},{}", safe_lookup![ltbl, "rio"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::SkipIfIoBitCleared => format!("SBIC {},{}", safe_lookup![ltbl, "rio"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::SkipIfIoBitSet => format!("SBIS {},{}", safe_lookup![ltbl, "rio"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::ExtendedLoadProgramMemoryZ => format!("ELPM R{}, Z", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::ExtendedLoadProgramMemoryZplus => format!("ELPM R{}, Z+", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpaceIndexX => format!("LD R{}, X", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementX => format!("LD R{}, X+", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementX => format!("LD R{}, -X", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementY => format!("LD R{}, Y+", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementY => format!("LD R{}, -Y", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementZ => format!("LD R{}, Z+", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementZ => format!("LD R{}, -Z", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadDirectFromDataSpace => format!("LDS R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "k"]),
-            AvrInstructionSet::LoadProgramMemoryZ => format!("LPM R{}, Z", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadProgramMemoryZplus => format!("LPM R{}, Z+", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::PopRegisterFromStack => format!("POP R{}", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::LoadAndClear =>format!("LAC Z,Rd"),
-            AvrInstructionSet::LoadAndSet =>format!("LAS Z,Rd"),
-            AvrInstructionSet::LoadAndToggle =>format!("LAT Z,Rd"),
-            AvrInstructionSet::PushRegisterToStack => format!("PUSH R{}", safe_lookup![ltbl, "rds"]),
-            AvrInstructionSet::StoreIndirectDataSpaceIndexX => format!("ST X, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePostIncrementX => format!("ST X+, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePreDecrementX => format!("ST -X, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePostIncrementY => format!("ST Y+, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePreDecrementY => format!("ST -Y, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePostIncrementZ => format!("ST Z+, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreIndirectDataSpacePreDecrementZ => format!("ST -Z, R{}", safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::StoreDirectDataSpace => format!("STS {},Rr", safe_lookup![ltbl, "k"]),
-            AvrInstructionSet::Exchange =>format!("XCH Z,Rd"),
-            AvrInstructionSet::MultiplyUnsigned => format!("MUL R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LogicalAnd => format!("AND R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LogicalExclusiveOr => format!("EOR R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::CopyRegister => format!("MOV R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LogicalOr => format!("OR R{},R{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LogicalAndWithImmediate => format!("ANDI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::BitLoadInRegisterfromT => format!("BLD R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::BitStorefromRegister => format!("BST R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::BranchSregBitCleared => format!("BRBC {},{}", safe_lookup![ltbl, "s"], safe_lookup![ltbl, "k"]),
-            AvrInstructionSet::BranchSregBitSet => format!("BRBS {},{}", safe_lookup![ltbl, "s"], safe_lookup![ltbl, "k"]),
-            AvrInstructionSet::SkipIfBitCleared => format!("SBRC R{},{}", safe_lookup![ltbl, "rsr"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::SkipIfBitSet => format!("SBRS R{},{}", safe_lookup![ltbl, "rsr"], safe_lookup![ltbl, "b"]),
-            AvrInstructionSet::CompareWithImmediate => format!("CPI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::LoadFromIOSpace => format!("IN R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "rio"]),
-            AvrInstructionSet::StoreToIoSpace => format!("OUT {},R{}", safe_lookup![ltbl, "rio"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LoadImmediate => format!("LDI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::LogicalOrWithImmediate => format!("ORI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::RelativeCallSubroutine => format!("RCALL {}", safe_lookup![ltbl, "k"]),
+            AvrInstructionSet::RotateRightThroughCarry => {
+                format!("ROR R{}", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::ClearIOBit => format!(
+                "CBI {},{}",
+                safe_lookup![ltbl, "rio"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::SetBitIoSpace => format!(
+                "SBI {},{}",
+                safe_lookup![ltbl, "rio"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::SkipIfIoBitCleared => format!(
+                "SBIC {},{}",
+                safe_lookup![ltbl, "rio"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::SkipIfIoBitSet => format!(
+                "SBIS {},{}",
+                safe_lookup![ltbl, "rio"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::ExtendedLoadProgramMemoryZ => {
+                format!("ELPM R{}, Z", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::ExtendedLoadProgramMemoryZplus => {
+                format!("ELPM R{}, Z+", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpaceIndexX => {
+                format!("LD R{}, X", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementX => {
+                format!("LD R{}, X+", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementX => {
+                format!("LD R{}, -X", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementY => {
+                format!("LD R{}, Y+", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementY => {
+                format!("LD R{}, -Y", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePostIncrementZ => {
+                format!("LD R{}, Z+", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadIndirectFromDataSpacePreDecrementZ => {
+                format!("LD R{}, -Z", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadDirectFromDataSpace => format!(
+                "LDS R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "k"]
+            ),
+            AvrInstructionSet::LoadProgramMemoryZ => {
+                format!("LPM R{}, Z", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadProgramMemoryZplus => {
+                format!("LPM R{}, Z+", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::PopRegisterFromStack => {
+                format!("POP R{}", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::LoadAndClear => "LAC Z,Rd".to_string(),
+            AvrInstructionSet::LoadAndSet => "LAS Z,Rd".to_string(),
+            AvrInstructionSet::LoadAndToggle => "LAT Z,Rd".to_string(),
+            AvrInstructionSet::PushRegisterToStack => {
+                format!("PUSH R{}", safe_lookup![ltbl, "rds"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpaceIndexX => {
+                format!("ST X, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePostIncrementX => {
+                format!("ST X+, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePreDecrementX => {
+                format!("ST -X, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePostIncrementY => {
+                format!("ST Y+, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePreDecrementY => {
+                format!("ST -Y, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePostIncrementZ => {
+                format!("ST Z+, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreIndirectDataSpacePreDecrementZ => {
+                format!("ST -Z, R{}", safe_lookup![ltbl, "rsr"])
+            }
+            AvrInstructionSet::StoreDirectDataSpace => {
+                format!("STS {},Rr", safe_lookup![ltbl, "k"])
+            }
+            AvrInstructionSet::Exchange => "XCH Z,Rd".to_string(),
+            AvrInstructionSet::MultiplyUnsigned => format!(
+                "MUL R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LogicalAnd => format!(
+                "AND R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LogicalExclusiveOr => format!(
+                "EOR R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::CopyRegister => format!(
+                "MOV R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LogicalOr => format!(
+                "OR R{},R{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LogicalAndWithImmediate => format!(
+                "ANDI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::BitLoadInRegisterfromT => format!(
+                "BLD R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::BitStorefromRegister => format!(
+                "BST R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::BranchSregBitCleared => format!(
+                "BRBC {},{}",
+                safe_lookup![ltbl, "s"],
+                safe_lookup![ltbl, "k"]
+            ),
+            AvrInstructionSet::BranchSregBitSet => format!(
+                "BRBS {},{}",
+                safe_lookup![ltbl, "s"],
+                safe_lookup![ltbl, "k"]
+            ),
+            AvrInstructionSet::SkipIfBitCleared => format!(
+                "SBRC R{},{}",
+                safe_lookup![ltbl, "rsr"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::SkipIfBitSet => format!(
+                "SBRS R{},{}",
+                safe_lookup![ltbl, "rsr"],
+                safe_lookup![ltbl, "b"]
+            ),
+            AvrInstructionSet::CompareWithImmediate => format!(
+                "CPI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::LoadFromIOSpace => format!(
+                "IN R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "rio"]
+            ),
+            AvrInstructionSet::StoreToIoSpace => format!(
+                "OUT {},R{}",
+                safe_lookup![ltbl, "rio"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LoadImmediate => format!(
+                "LDI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::LogicalOrWithImmediate => format!(
+                "ORI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::RelativeCallSubroutine => {
+                format!("RCALL {}", safe_lookup![ltbl, "k"])
+            }
             AvrInstructionSet::RelativeJump => format!("RJMP {}", safe_lookup![ltbl, "k"]),
-            AvrInstructionSet::SubtractImmediateWithCarrySbi => format!("SBCI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::SubtractImmediate => format!("SUBI R{},{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "imd"]),
-            AvrInstructionSet::LoadIndirectWithDisplacementY => format!("LDD R{}, Y+{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "q"]),
-            AvrInstructionSet::StoreIndirectWithDisplacementY => format!("STD Y+{}, R{}", safe_lookup![ltbl, "q"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LoadIndirectWithDisplacementZ => format!("LDD R{}, Z+{}", safe_lookup![ltbl, "rds"], safe_lookup![ltbl, "q"]),
-            AvrInstructionSet::StoreIndirectWithDisplacementZ => format!("STD Z+{}, R{}", safe_lookup![ltbl, "q"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::LoadStoreIndirectWithHightDisplacement => format!("STD Y+{}, R{}", safe_lookup![ltbl, "q"], safe_lookup![ltbl, "rsr"]),
-            AvrInstructionSet::Invalid => format!("???")
+            AvrInstructionSet::SubtractImmediateWithCarrySbi => format!(
+                "SBCI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::SubtractImmediate => format!(
+                "SUBI R{},{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "imd"]
+            ),
+            AvrInstructionSet::LoadIndirectWithDisplacementY => format!(
+                "LDD R{}, Y+{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "q"]
+            ),
+            AvrInstructionSet::StoreIndirectWithDisplacementY => format!(
+                "STD Y+{}, R{}",
+                safe_lookup![ltbl, "q"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LoadIndirectWithDisplacementZ => format!(
+                "LDD R{}, Z+{}",
+                safe_lookup![ltbl, "rds"],
+                safe_lookup![ltbl, "q"]
+            ),
+            AvrInstructionSet::StoreIndirectWithDisplacementZ => format!(
+                "STD Z+{}, R{}",
+                safe_lookup![ltbl, "q"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::LoadStoreIndirectWithHightDisplacement => format!(
+                "STD Y+{}, R{}",
+                safe_lookup![ltbl, "q"],
+                safe_lookup![ltbl, "rsr"]
+            ),
+            AvrInstructionSet::Invalid => "???".to_string(),
         }
     }
 }

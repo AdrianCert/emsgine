@@ -7,12 +7,11 @@
 // use emsgine_core::memory::{MemoryDevice, RegistersPage};
 
 fn test_vec() {
-    let mut mem: Vec<u8> = vec![0;34];
+    let mut mem: Vec<u8> = vec![0; 34];
     mem[2] = 12;
     mem[0] = 11;
     print!("{:?}", mem);
 }
-
 
 // fn simulation() {
 //     let mut cpu = CpuState {

@@ -25,7 +25,7 @@ mod tests {
 
     #[derive(Debug)]
     pub struct BasicsParameter<'a, T> {
-        pub parameters: Box<Vec<(&'a str, T)>>,
+        pub parameters: Vec<(&'a str, T)>,
     }
 
     impl<'a, T> ContextParameter for BasicsParameter<'a, T>
@@ -35,10 +35,10 @@ mod tests {
         type Output = T;
 
         fn param(&self, value: &str) -> Option<Self::Output> {
-            let items = self.parameters.as_ref();
-            for (key, param) in items {
+            // let items = ;
+            for (key, param) in &self.parameters {
                 if value.cmp(key) == core::cmp::Ordering::Equal {
-                    return Some(param.clone());
+                    return Some(*param);
                 }
             }
             None
@@ -48,20 +48,20 @@ mod tests {
     #[test]
     fn usablity_param() {
         let param_conext_1 = BasicsParameter::<usize> {
-            parameters: Box::new(vec![("test", 12 as usize), ("value", 2 as usize)]),
+            parameters: vec![("test", 12_usize), ("value", 2_usize)],
         };
         let param_conext_2 = BasicsParameter::<usize> {
-            parameters: Box::new(vec![("test", 11 as usize), ("value", 3 as usize)]),
+            parameters: vec![("test", 11_usize), ("value", 3_usize)],
         };
         let value_a = ContextValue::<usize>::Immediate(12);
         let value_b = ContextValue::<usize>::Parameter("value");
 
-        assert_eq!(value_a.resolve(&param_conext_1), Some(12 as usize));
-        assert_eq!(value_a.resolve(&param_conext_1), Some(12 as usize));
+        assert_eq!(value_a.resolve(&param_conext_1), Some(12_usize));
+        assert_eq!(value_a.resolve(&param_conext_1), Some(12_usize));
 
-        assert_eq!(value_b.resolve(&param_conext_1), Some(2 as usize));
-        assert_eq!(value_b.resolve(&param_conext_2), Some(3 as usize));
+        assert_eq!(value_b.resolve(&param_conext_1), Some(2_usize));
+        assert_eq!(value_b.resolve(&param_conext_2), Some(3_usize));
 
-        assert_eq!(value_b.resolve(&param_conext_2), Some(3 as usize));
+        assert_eq!(value_b.resolve(&param_conext_2), Some(3_usize));
     }
 }

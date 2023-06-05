@@ -1,10 +1,10 @@
 pub mod actions;
-pub mod models;
-pub mod bitwise;
 pub mod ast;
-pub mod primitive;
+pub mod bitwise;
 pub mod contexts;
 pub mod lookup;
+pub mod models;
+pub mod primitive;
 
 // #[cfg(test)]
 // mod tests {

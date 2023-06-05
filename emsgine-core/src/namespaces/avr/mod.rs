@@ -17,6 +17,7 @@ struct DecoderDevice {}
 impl<'a> InstructionDecoder<'a> for DecoderDevice {
     type Context = CentralProcessUnit;
     type Instruction = AvrInstructionSet;
+    type InstructionParameters<'ins> = Vec<(&'ins str, emsgine_lib::models::bytes::DataWordSized)>;
 
     fn word_size(&self) -> usize {
         2
@@ -32,13 +33,7 @@ impl<'a> InstructionDecoder<'a> for DecoderDevice {
     fn analizer(
         &self,
         data: Vec<u8>,
-    ) -> Result<
-        (
-            Self::Instruction,
-            Vec<(&'a str, emsgine_lib::models::bytes::DataWordSized)>,
-        ),
-        u8,
-    > {
+    ) -> Result<(Self::Instruction, Self::InstructionParameters<'a>), u8> {
         let bytes = data
             .chunks(2)
             .map(|chk| ENDIANNESS.compose(chk.to_vec()).as_u16())
@@ -54,54 +49,55 @@ mod tests {
     use emsgine_lib::models::bytes::DataWordSized;
     use emsgine_lib::models::instructionset::FormatInstruction;
 
+    use super::cpu::MemoryMap;
+    use super::cpu::SymbolTable;
     use super::AddressPointer;
     use super::CentralProcessUnit;
     use super::DecoderDevice;
-    use super::cpu::MemoryMap;
-    use super::cpu::SymbolTable;
+    use crate::contexts::loader;
     use crate::contexts::CpuContext;
     use crate::contexts::InstructionDecoder;
     use crate::memory::MemoryDevice;
-    use crate::contexts::loader;
 
     #[test]
     fn decoder() {
-
         let path = r"C:\Users\adria\Documents\Arduino\Blink\Blink.ino.hex";
 
-        let decoder = DecoderDevice{};
+        let decoder = DecoderDevice {};
         let mut cpu = CentralProcessUnit {
-            mram: Rc::new(MemoryDevice::from(vec![0;0xff3])),
+            mram: Rc::new(MemoryDevice::from(vec![0; 0xff3])),
             mmap: MemoryMap {
                 reg_page: 0,
                 io_space: 32,
                 data_space: 60,
-                overflow: 0xff3
+                overflow: 0xff3,
             },
-            stbl: SymbolTable::create(vec![
-                ("PC", (AddressPointer::MemorySpace(0x1usize), 2))
-            ]),
-            mspc: Rc::new(MemoryDevice::from(vec![0;0xf])),
-            mprg: Rc::new(MemoryDevice::from(vec![0;0xfff]))
+            stbl: SymbolTable::create(vec![("PC", (AddressPointer::MemorySpace(0x1usize), 2))]),
+            mspc: Rc::new(MemoryDevice::from(vec![0; 0xf])),
+            mprg: Rc::new(MemoryDevice::from(vec![0; 0xfff])),
         };
 
         loader::load_memory_from_hexfile(path, cpu.mprg.clone());
-        println!("cpu sate: {cpu:?}", cpu=cpu);
+        println!("cpu sate: {cpu:?}", cpu = cpu);
 
         let mut x = 0;
         while x <= 0x039c / 2 {
             let decoded = decoder.decode(&mut cpu);
             let addr = cpu.states_get("PC");
-            cpu.states_update("PC", |x| {
-                DataWordSized::DataSizeWord(x.as_u16() + 2)
-            });
-            let mem =cpu.memory_pull(AddressPointer::ProgramSpace(addr.as_u16().into()), 2);
+            cpu.states_update("PC", |x| DataWordSized::DataSizeWord(x.as_u16() + 2));
+            let mem = cpu.memory_pull(AddressPointer::ProgramSpace(addr.as_u16().into()), 2);
             let val1 = mem[0];
             let val2 = mem[1];
 
             if let Some(ins) = decoded {
                 let (ins, ops) = ins;
-                println!("0x{:04x} {:02x} {:02x} >> {}", addr.as_u16(), val1, val2, ins.format(&ops));
+                println!(
+                    "0x{:04x} {:02x} {:02x} >> {}",
+                    addr.as_u16(),
+                    val1,
+                    val2,
+                    ins.format(&ops)
+                );
             }
             x += 1;
         }

@@ -33,6 +33,16 @@ where
     ) -> RegisterAssign<'a, C> {
         RegisterAssign { register, value }
     }
+
+    pub fn new_register(
+        register: usize,
+        value: &dyn ActionEvaluator<C, C::Register>,
+    ) -> RegisterAssign<'_, C> {
+        RegisterAssign {
+            register: ContextValue::Immediate(register),
+            value,
+        }
+    }
 }
 
 impl<C> Action<C> for RegisterAssign<'_, C>
@@ -41,10 +51,7 @@ where
 {
     fn run(&self, context: &mut C) {
         let val = self.value.eval(context);
-        context.register_set(
-            self.register.resolve(context).unwrap(),
-            val,
-        );
+        context.register_set(self.register.resolve(context).unwrap(), val);
     }
 }
 
@@ -79,7 +86,7 @@ where
     C: CpuContext,
 {
     fn eval(&self, context: &mut C) -> C::Register {
-        return context.register_get(self.register);
+        context.register_get(self.register)
     }
 }
 

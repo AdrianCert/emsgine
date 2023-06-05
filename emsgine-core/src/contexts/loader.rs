@@ -6,16 +6,14 @@ use ihex::Record as HexRecord;
 
 use super::MemoryContext;
 
-pub fn load_memory_from_hexfile<'a>(
-    filepath: &'a str,
+pub fn load_memory_from_hexfile(
+    filepath: &str,
     context: Rc<dyn MemoryContext<Output = u8>>,
 ) -> bool {
     if let Ok(content) = fs::read_to_string(filepath) {
         HexReader::new(content.as_str()).for_each(|rec| {
-            if let Ok(rec) = rec {
-                if let HexRecord::Data { offset, value } = rec {
-                    context.write_bytes(offset.into(), value)
-                }
+            if let Ok(HexRecord::Data { offset, value }) = rec {
+                context.write_bytes(offset.into(), value)
             }
         });
 

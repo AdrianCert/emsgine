@@ -1,5 +1,5 @@
-use crate::lookup::Lookup;
 use super::bytes::DataWordSized;
+use crate::lookup::Lookup;
 
 pub trait InstructionNamespace {}
 
@@ -9,5 +9,5 @@ pub trait MnemonicInstruction: InstructionNamespace {
 
 pub trait FormatInstruction: InstructionNamespace {
     fn formatstr<'a>(&self) -> &'a str;
-    fn format<'a>(&self, ltbl: &'a dyn Lookup<&str, DataWordSized>) -> String;
+    fn format(&self, ltbl: &dyn Lookup<&str, DataWordSized>) -> String;
 }
