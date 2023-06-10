@@ -3,7 +3,7 @@
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
 
-type InstructionParameters<'a> = Vec<(&'a str, DataWordSized)>;
+pub type InstructionParameters<'a> = Vec<(&'a str, DataWordSized)>;
 
 macro_rules! extract_bitcoded {
     ($v:expr, $t:tt[ 0x20f ]) => {

@@ -57,6 +57,7 @@ pub enum AddressPointer {
     DataSpace(usize),    // rest of data here
     MemorySpace(usize),  // used to absolute maps
     ProgramSpace(usize), // used to store program
+    SpecialSpace(usize),
 }
 
 #[derive(Debug)]
@@ -104,6 +105,7 @@ impl PointerContext for AddressPointer {
             AddressPointer::DataSpace(val) => (context.mmap.data_space + val, context.mram.clone()),
             AddressPointer::MemorySpace(val) => (*val, context.mram.clone()),
             AddressPointer::ProgramSpace(val) => (*val, context.mprg.clone()),
+            AddressPointer::SpecialSpace(val) => (*val, context.mspc.clone()),
         }
     }
 }

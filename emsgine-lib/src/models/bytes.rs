@@ -1,5 +1,7 @@
 // use std::default;
 
+use crate::{bitwise::BitSel, get_bit};
+
 pub enum EndianByteOrdering {
     LittleEndian,
     BitEndian,
@@ -184,5 +186,15 @@ impl EndianByteOrdering {
             }
             _ => vec![0],
         }
+    }
+}
+
+impl BitSel for DataWordSized {
+    type Output = DataWordSized;
+
+    fn bitsel(self, rhs: Self) -> Self::Output {
+        let mut num = self.as_u64();
+        num = get_bit!(num, rhs.as_u64());
+        DataWordSized::DataSizeByte(num as u8)
     }
 }

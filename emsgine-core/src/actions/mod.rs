@@ -5,8 +5,6 @@ pub use emsgine_lib::models::instructionset::InstructionNamespace;
 
 use crate::contexts::CpuContext;
 
-pub mod instruction;
-
 pub struct InstructionPull {
     pub wordsize: u8,
     pub endianness: EndianByteOrdering,

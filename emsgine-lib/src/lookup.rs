@@ -9,18 +9,23 @@ macro_rules! safe_lookup {
 
 pub trait Lookup<K, V> {
     fn lookup(&self, key: K) -> Option<&V>;
+    fn fields(&self) -> Vec<K>;
 }
 
 impl<K, V> Lookup<K, V> for std::collections::HashMap<K, V>
 where
-    K: std::cmp::Eq + core::hash::Hash,
+    K: std::cmp::Eq + core::hash::Hash + Copy,
 {
     fn lookup(&self, key: K) -> Option<&V> {
         self.get(&key)
     }
+
+    fn fields(&self) -> Vec<K> {
+        self.iter().map(|(k, _v)| *k).collect()
+    }
 }
 
-impl<'b> Lookup<&str, DataWordSized> for Vec<(&'b str, DataWordSized)> {
+impl<'b> Lookup<&'b str, DataWordSized> for Vec<(&'b str, DataWordSized)> {
     fn lookup(&self, tkey: &str) -> Option<&DataWordSized> {
         for pair in self.iter() {
             let (key, value) = pair;
@@ -29,6 +34,10 @@ impl<'b> Lookup<&str, DataWordSized> for Vec<(&'b str, DataWordSized)> {
             }
         }
         None
+    }
+
+    fn fields(&self) -> Vec<&'b str> {
+        self.iter().map(|(k, _v)| *k).collect()
     }
 }
 

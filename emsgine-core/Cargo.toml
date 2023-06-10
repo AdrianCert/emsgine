@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 emsgine-lib = { path = "../emsgine-lib" }
 ihex = "3.0"
+lazy_static = "1.4.0"
+chain-cmp = "0.2.0"

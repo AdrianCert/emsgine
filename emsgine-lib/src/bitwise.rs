@@ -26,6 +26,17 @@ macro_rules! get_bit {
     };
 }
 
+#[macro_export]
+macro_rules! flag_eval {
+    ($flag:expr , $condition:expr) => {
+        if $condition {
+            $flag
+        } else {
+            0
+        }
+    };
+}
+
 pub fn word_split(value: u16) -> (u8, u8) {
     ((value >> 8) as u8, value as u8)
 }
@@ -89,6 +100,7 @@ macro_rules! decrement_impl {
 decrement_impl! {usize u8 u16 u32 u64 u128 isize i8 i16 i32 i64 i128}
 
 pub use clr_bit;
+pub use flag_eval;
 pub use get_bit;
 pub use set_bit;
 pub use tgl_bit;
