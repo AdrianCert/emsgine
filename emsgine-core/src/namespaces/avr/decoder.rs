@@ -1,4 +1,4 @@
-// generated-code: 2023-06-05T12:50:50.415889
+// generated-code: 2023-06-14T03:33:34.952515
 
 use super::instructions::AvrInstructionSet;
 use emsgine_lib::models::bytes::DataWordSized;
@@ -420,7 +420,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                         _ => Err(0u8),
                     },
                     0xe => {
-                        if 4 > inst.len() {
+                        if 2 > inst.len() {
                             return Err(4u8);
                         }
 
@@ -487,7 +487,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                         _ => Err(0u8),
                     },
                     0xc => {
-                        if 4 > inst.len() {
+                        if 2 > inst.len() {
                             return Err(4u8);
                         }
 
@@ -644,7 +644,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                         )],
                     )),
                     0x0 => {
-                        if 4 > inst.len() {
+                        if 2 > inst.len() {
                             return Err(4u8);
                         }
 
@@ -653,11 +653,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                             vec![
                                 (
                                     "rds",
-                                    DataWordSized::DataSizeByte({
-                                        let mut ext = extract_bitcoded!(inst, u8[0x1f0]);
-                                        ext += 16;
-                                        ext
-                                    }),
+                                    DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0])),
                                 ),
                                 (
                                     "k",
@@ -718,10 +714,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                         AvrInstructionSet::PushRegisterToStack,
                         vec![(
                             "rds",
-                            DataWordSized::DataSizeSignedByte({
-                                let ext = extract_bitcoded!(inst, u8[0x1f0]);
-                                -16 * ((0x10 & ext as i8) >> 4) + (0xf & ext as i8)
-                            }),
+                            DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0x1f0])),
                         )],
                     )),
                     0xc => Ok((
@@ -774,7 +767,7 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                         )],
                     )),
                     0x0 => {
-                        if 4 > inst.len() {
+                        if 2 > inst.len() {
                             return Err(4u8);
                         }
 
@@ -1045,7 +1038,11 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
                 ),
                 (
                     "rds",
-                    DataWordSized::DataSizeByte(extract_bitcoded!(inst, u8[0xf0])),
+                    DataWordSized::DataSizeByte({
+                        let mut ext = extract_bitcoded!(inst, u8[0xf0]);
+                        ext += 16;
+                        ext
+                    }),
                 ),
             ],
         )),
@@ -1070,7 +1067,10 @@ pub fn decode<'a>(inst: Vec<u16>) -> Result<(AvrInstructionSet, InstructionParam
             AvrInstructionSet::RelativeCallSubroutine,
             vec![(
                 "k",
-                DataWordSized::DataSizeWord(extract_bitcoded!(inst, u16[0xfff])),
+                DataWordSized::DataSizeSignedWord({
+                    let ext = extract_bitcoded!(inst, u16[0xfff]);
+                    -2048 * ((0x800 & ext as i16) >> 11) + (0x7ff & ext as i16)
+                }),
             )],
         )),
         0xc000 => Ok((

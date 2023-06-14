@@ -108,6 +108,17 @@ impl PointerContext for AddressPointer {
             AddressPointer::SpecialSpace(val) => (*val, context.mspc.clone()),
         }
     }
+
+    fn as_raw_value(&self) -> usize {
+        match self {
+            AddressPointer::RegisterPage(val) => *val,
+            AddressPointer::IoSpace(val) => *val,
+            AddressPointer::DataSpace(val) => *val,
+            AddressPointer::MemorySpace(val) => *val,
+            AddressPointer::ProgramSpace(val) => *val,
+            AddressPointer::SpecialSpace(val) => *val,
+        }
+    }
 }
 
 impl Context for CentralProcessUnit {}

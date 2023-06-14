@@ -108,8 +108,8 @@
 1001 000d dddd 1010 $width 2 $syntax LD Rd, -Y $name LoadIndirectFromDataSpacePreDecrementY
 1001 000d dddd 0001 $width 2 $syntax LD Rd, Z+ $name LoadIndirectFromDataSpacePostIncrementZ
 1001 000d dddd 0010 $width 2 $syntax LD Rd, -Z $name LoadIndirectFromDataSpacePreDecrementZ
-1110 KKKK dddd KKKK $width 2 $syntax LDI Rd,K $name LoadImmediate
-1001 000d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax LDS Rd,k $name LoadDirectFromDataSpace $etp.d offset 16
+1110 KKKK dddd KKKK $width 2 $syntax LDI Rd,K $name LoadImmediate $etp.d offset 16
+1001 000d dddd 0000 kkkk kkkk kkkk kkkk $width 4 $syntax LDS Rd,k $name LoadDirectFromDataSpace
 1001 0101 1100 1000 $width 2 $syntax LPM $name LoadProgramMemory
 1001 000d dddd 0100 $width 2 $syntax LPM Rd, Z $name LoadProgramMemoryZ
 1001 000d dddd 0101 $width 2 $syntax LPM Rd, Z+ $name LoadProgramMemoryZplus
@@ -125,8 +125,8 @@
 0110 KKKK dddd KKKK $width 2 $syntax ORI Rd,K $name LogicalOrWithImmediate $etp.d offset 16
 1011 1AAr rrrr AAAA $width 2 $syntax OUT A,Rr $name StoreToIoSpace
 1001 000d dddd 1111 $width 2 $syntax POP Rd $name PopRegisterFromStack
-1001 001d dddd 1111 $width 2 $syntax PUSH Rd $name PushRegisterToStack $etp.d cast c2
-1101 kkkk kkkk kkkk $width 2 $syntax RCALL k $name RelativeCallSubroutine
+1001 001d dddd 1111 $width 2 $syntax PUSH Rd $name PushRegisterToStack
+1101 kkkk kkkk kkkk $width 2 $syntax RCALL k $name RelativeCallSubroutine $etp.k cast c2
 1001 0101 0000 1000 $width 2 $syntax RET $name ReturnFromSubroutine
 1001 0101 0001 1000 $width 2 $syntax RETI $name ReturnFromInterrupt
 1100 kkkk kkkk kkkk $width 2 $syntax RJMP k $name RelativeJump $etp.k cast c2
@@ -161,7 +161,7 @@
 1000 qq1r rrrr 0qqq $width 2 $syntax STD Z+q, Rr $name StoreIndirectWithDisplacementZ
 #############################################
 1010 qqfr rrrr aqqq $width 2 $syntax STD Y+q, Rr $name LoadStoreIndirectWithHightDisplacement $map.a 0=Y 1=Z $map.f 0=Load 1=Store
-1010 fkkk dddd kkkk $width 2 $syntax LDS Rd,k $name LoadStoreDirectFromDataSpaceShort $map.f 0=Load 1=Store
+1010 fkkk dddd kkkk $width 2 $syntax LDS Rd,k $name LoadStoreDirectFromDataSpaceShort $map.f 0=Load 1=Store $etp.d offset 16
 # 1000 001r rrrr 1000 $width 2 $syntax ST Y, Rr $pseudo STD Y+q, Rr
 # 1000 000d dddd 1000 $width 2 $syntax LD Rd, Y $name LoadIndirectFromDataSpaceIndexY $pseudo LDD Rd, Y+q
 # 1000 000d dddd 0000 $width 2 $syntax LD Rd, Z $name LoadIndirectFromDataSpaceIndexZ $pseudo LDD Rd, Z+q

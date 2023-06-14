@@ -16,4 +16,6 @@ pub trait PointerContext {
         &self,
         context: &Self::Context,
     ) -> (usize, Rc<dyn MemoryContext<Output = Self::Output>>);
+
+    fn as_raw_value(&self) -> usize;
 }
