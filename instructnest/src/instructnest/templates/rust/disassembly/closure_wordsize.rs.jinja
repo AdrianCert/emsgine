@@ -1,3 +1,4 @@
-if {{word_size}} > {{variable}}.len() {
+{% set req_size = -(-word_size // chunk_size)%}
+if {{req_size}} > {{variable}}.len() {
         return Err({{word_size}}u8)
     }

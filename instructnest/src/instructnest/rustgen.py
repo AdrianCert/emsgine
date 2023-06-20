@@ -164,6 +164,7 @@ class InstructionDecoderGenerator:
     def render_closure_wordsize(self, word_size: int):
         return self.template_closure_wordsize.render(
             variable=self.variable,
+            chunk_size=self.word_size,
             word_size=word_size
         )
 
