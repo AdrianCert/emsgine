@@ -214,7 +214,7 @@ class InstructionDecoderDeviceMinimisation:
 
 
 if __name__ == "__main__":
-    filepath = Path(r"D:\dev\world-embeddable-simulator\docs\instruction-sets\avr.opcode.nfo")
+    filepath = Path(r"D:\dev\emsgine\docs\instruction-sets\avr.opcode.nfo")
     data = filepath.read_text(encoding="utf-8").splitlines()
     solver = InstructionDecoderDeviceMinimisation(RF_BITS_MAP)
     solution = solver.run(data, True)

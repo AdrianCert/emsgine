@@ -10,7 +10,8 @@ pub use op_binary::BinaryOperationNode;
 pub use op_unary::UnaryOperationNode;
 pub use primitives::Immediate;
 pub use primitives::LocalAccess;
-pub use primitives::LocalAssigment;
+pub use primitives::LocalIndirectAssigment;
+pub use primitives::NoOperation;
 pub use statements::BodyStatement;
 pub use statements::CoreStament;
 

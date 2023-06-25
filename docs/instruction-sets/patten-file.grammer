@@ -1,0 +1,27 @@
+start ::= contents
+
+contents ::= patten contents
+    | comment_blk contents
+    | eof
+
+comment_blk ::= r\#.*\n
+
+patten ::= patten_data fields_data
+
+patten_data ::= r\([01a-z]{4} )*[01a-z]{0,4}
+
+fields_data ::= field_data fields_data
+
+field_data ::= '$' field_path ' ' field_value
+
+field_path ::= field_key
+    | field_key '.' field_path
+
+field_key ::= 'name'
+    | 'syntex'
+    | 'etp'
+    | 'etp'
+    | 'width'
+    | r\[a-zA-Z0-9]+
+
+field_value ::= r\[^$]+

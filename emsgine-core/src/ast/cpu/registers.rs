@@ -125,26 +125,29 @@ where
     }
 }
 
-pub struct RegisterIndirectAssign<C>
+pub struct RegisterIndirectAssign<C, T>
 where
     C: CpuContext,
+    T: Into<<C as CpuContext>::Register>,
 {
     pub register: Node<C, DataWordSized>,
-    pub value: Node<C, C::Register>,
+    pub value: Node<C, T>,
 }
 
-impl<C> RegisterIndirectAssign<C>
+impl<C, T> RegisterIndirectAssign<C, T>
 where
     C: CpuContext,
+    T: Into<<C as CpuContext>::Register>,
 {
-    pub fn new(register: Node<C, DataWordSized>, value: Node<C, C::Register>) -> Self {
+    pub fn new(register: Node<C, DataWordSized>, value: Node<C, T>) -> Self {
         RegisterIndirectAssign { register, value }
     }
 }
 
-impl<C> AbstactSyntaxNode for RegisterIndirectAssign<C>
+impl<C, T> AbstactSyntaxNode for RegisterIndirectAssign<C, T>
 where
     C: CpuContext,
+    T: Into<<C as CpuContext>::Register>,
 {
     type Output = ();
     type Context = C;
@@ -152,13 +155,14 @@ where
     fn eval(&self, context: &mut Self::Context) -> Self::Output {
         let value = self.value.eval(context);
         let register = self.register.eval(context);
-        context.register_set(register.as_u64() as usize, value);
+        context.register_set(register.as_u64() as usize, value.into());
     }
 }
 
-impl<C> BoxPorting for RegisterIndirectAssign<C>
+impl<C, T> BoxPorting for RegisterIndirectAssign<C, T>
 where
     C: CpuContext,
+    T: Into<<C as CpuContext>::Register>,
 {
     fn porting_box(self) -> Box<Self> {
         Box::new(self)

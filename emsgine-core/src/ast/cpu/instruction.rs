@@ -1,35 +1,53 @@
-use std::sync::Arc;
+use std::{collections::LinkedList, sync::Arc};
 
 use emsgine_lib::{
     ast::{AbstactSyntaxNode, Node},
-    contexts::locals::{LocalEnviroment, SCOPES},
+    contexts::locals::{LocalEnvironment, SCOPES},
     lookup::Lookup,
     models::{
         bytes::DataWordSized,
-        instructionset::{AstInstruction, FormatInstruction},
+        instructionset::{FormatInstruction, InstructionNamespace},
     },
 };
 
+use crate::ast::provider::AstFactoryProvider;
+
+use super::CpuContext;
+
 pub struct CpuInstruction<C, T> {
     pub name: String,
-    pub local: Arc<LocalEnviroment<DataWordSized>>,
+    pub local: Arc<LocalEnvironment<DataWordSized>>,
     pub ast: Node<C, T>,
 }
 
-impl<'node, C, T> CpuInstruction<C, T> {
-    pub fn from_instruction<InstructionSet, InstructionArg>(
-        inst_id: InstructionSet,
-        inst_arg: &InstructionArg,
-    ) -> Self
+pub struct CpuInstructionFactory<ISET, C, T>
+where
+    ISET: InstructionNamespace + FormatInstruction,
+{
+    pub providers: LinkedList<Box<dyn AstFactoryProvider<ISET, C, Output = T>>>,
+}
+
+impl<'factory, ISET, C, T> CpuInstructionFactory<ISET, C, T>
+where
+    ISET: InstructionNamespace + FormatInstruction,
+    C: CpuContext,
+    T: Copy,
+{
+    pub fn parse<ARGS>(&self, inst: &ISET, param: &ARGS) -> Option<CpuInstruction<C, T>>
     where
-        InstructionSet: AstInstruction<Context = C, Output = T> + FormatInstruction,
-        InstructionArg: Lookup<&'node str, DataWordSized>,
+        ARGS: Lookup<&'factory str, DataWordSized>,
     {
-        CpuInstruction {
-            name: inst_id.format(inst_arg),
-            local: Arc::new(inst_arg.into()),
-            ast: inst_id.get_ast(),
+        for provider in self.providers.iter() {
+            if let Some(ast) = provider.get_ast(inst) {
+                return Some(CpuInstruction {
+                    name: inst.format(param),
+                    local: Arc::new(param.into()),
+                    ast,
+                });
+            }
         }
+
+        None
     }
 }
 

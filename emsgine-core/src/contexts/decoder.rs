@@ -73,10 +73,8 @@ pub trait InstructionDecoder<'a> {
         DecoderResult::Critical { addr: *pc_raw }
     }
 
-    fn analizer(
-        &self,
-        data: &Vec<u8>,
-    ) -> Result<(Self::Instruction, Self::InstructionParameters), u8>;
+    fn analizer(&self, data: &[u8])
+        -> Result<(Self::Instruction, Self::InstructionParameters), u8>;
     fn current_addr(
         &self,
         context: &Self::Context,

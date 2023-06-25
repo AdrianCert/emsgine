@@ -30,7 +30,7 @@ impl<'a> InstructionDecoder<'a> for DecoderDevice {
 
     fn analizer(
         &self,
-        data: &Vec<u8>,
+        data: &[u8],
     ) -> Result<(Self::Instruction, Self::InstructionParameters), u8> {
         let bytes = data
             .chunks(2)

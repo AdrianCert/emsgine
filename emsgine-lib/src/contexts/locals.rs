@@ -11,16 +11,16 @@ use crate::{lookup::Lookup, models::bytes::DataWordSized};
 // ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚══════╝╚═╝  ╚═══╝  ╚═══╝
 // https://patorjk.com/software/taag/#p=display&h=0&v=1&f=ANSI%20Shadow&t=locals%20env
 
-pub struct LocalEnviroment<V> {
+pub struct LocalEnvironment<V> {
     locals: RefCell<HashMap<String, V>>,
 }
 
-impl<V> LocalEnviroment<V>
+impl<V> LocalEnvironment<V>
 where
     V: Copy,
 {
     pub fn new() -> Self {
-        LocalEnviroment {
+        LocalEnvironment {
             locals: RefCell::new(HashMap::new()),
         }
     }
@@ -37,7 +37,7 @@ where
     }
 }
 
-impl<V> Default for LocalEnviroment<V>
+impl<V> Default for LocalEnvironment<V>
 where
     V: Copy,
 {
@@ -46,13 +46,13 @@ where
     }
 }
 
-impl<'a, Value, L> From<&L> for LocalEnviroment<Value>
+impl<'a, Value, L> From<&L> for LocalEnvironment<Value>
 where
     Value: Copy,
     L: Lookup<&'a str, Value>,
 {
     fn from(value: &L) -> Self {
-        let local = LocalEnviroment::new();
+        let local = LocalEnvironment::new();
         for field in value.fields() {
             local.set(field, *value.lookup(field).unwrap())
         }
@@ -69,28 +69,28 @@ where
 // ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 // https://patorjk.com/software/taag/#p=display&h=0&v=1&f=ANSI%20Shadow&t=locals%20mgr
 
-pub struct LocalEnviromentManager<V> {
-    stack: RefCell<Vec<Arc<LocalEnviroment<V>>>>,
+pub struct LocalEnvironmentManager<V> {
+    stack: RefCell<Vec<Arc<LocalEnvironment<V>>>>,
 }
 
-impl LocalEnviromentManager<DataWordSized> {
+impl LocalEnvironmentManager<DataWordSized> {
     pub fn new() -> Self {
-        LocalEnviromentManager {
+        LocalEnvironmentManager {
             stack: RefCell::new(Vec::new()),
         }
     }
 
-    pub fn new_local(&self) -> Arc<LocalEnviroment<DataWordSized>> {
-        let local = Arc::new(LocalEnviroment::new());
+    pub fn new_local(&self) -> Arc<LocalEnvironment<DataWordSized>> {
+        let local = Arc::new(LocalEnvironment::new());
         self.stack.borrow_mut().push(local.clone());
         local
     }
 
-    pub fn push_local(&self, local: Arc<LocalEnviroment<DataWordSized>>) {
+    pub fn push_local(&self, local: Arc<LocalEnvironment<DataWordSized>>) {
         self.stack.borrow_mut().push(local);
     }
 
-    pub fn drop_local(&self) -> Arc<LocalEnviroment<DataWordSized>> {
+    pub fn drop_local(&self) -> Arc<LocalEnvironment<DataWordSized>> {
         self.stack.borrow_mut().pop().unwrap()
     }
 
@@ -115,13 +115,13 @@ impl LocalEnviromentManager<DataWordSized> {
     }
 }
 
-impl Default for LocalEnviromentManager<DataWordSized> {
+impl Default for LocalEnvironmentManager<DataWordSized> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-unsafe impl Sync for LocalEnviromentManager<DataWordSized> {}
+unsafe impl Sync for LocalEnvironmentManager<DataWordSized> {}
 
 // ███████╗ ██████╗ ██████╗ ██████╗ ███████╗███████╗
 // ██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝██╔════╝
@@ -132,9 +132,9 @@ unsafe impl Sync for LocalEnviromentManager<DataWordSized> {}
 // https://patorjk.com/software/taag/#p=display&h=0&v=1&f=ANSI%20Shadow&t=scopes
 
 lazy_static! {
-    pub static ref SCOPES: LocalEnviromentManager<DataWordSized> = {
-        LocalEnviromentManager {
-            stack: RefCell::new(vec![Arc::new(LocalEnviroment::new())]),
+    pub static ref SCOPES: LocalEnvironmentManager<DataWordSized> = {
+        LocalEnvironmentManager {
+            stack: RefCell::new(vec![Arc::new(LocalEnvironment::new())]),
         }
     };
 }
